@@ -1,0 +1,33 @@
+#!/usr/bin/env perl -w
+
+use strict;
+use warnings;
+
+# VERSION
+# ABSTRACT: Default Abstract Description, Please Change.
+# PODNAME: OS::Package::ospkg
+
+use OS::Package;
+
+OS::Package->run() unless caller();
+
+1;
+
+=head1 SYNOPSIS
+
+	$ ospkg [OPTION] [APPLICATION]
+
+=head1 OPTIONS
+
+=over
+
+=item B<download>
+
+Download the distribution.
+
+=item B<build>
+
+Builds the distribution.
+
+
+=back 
