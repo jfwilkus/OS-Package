@@ -1,0 +1,5 @@
+dir:
+  repository: ospkg/distfiles
+  configs: ospkg/configs
+  work: ospkg/work
+
