@@ -5,9 +5,10 @@ my @PM = qw(
 	OS::Package::Log
 	OS::Package::Config
 	OS::Package::Application
-    OS::Package::Application::Role::Download
-    OS::Package::Application::Role::Extract
-    OS::Package::Application::Factory
+	OS::Package::Artifact
+    OS::Package::Artifact::Role::Download
+    OS::Package::Artifact::Role::Extract
+    OS::Package::Artifact::Factory
     OS::Package::Build::Configure
 );
 
