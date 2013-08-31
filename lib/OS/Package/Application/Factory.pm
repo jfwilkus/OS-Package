@@ -37,20 +37,29 @@ sub vivify {
 
     my $app = OS::Package::Application->new( name => $name );
 
+    my $repository = sprintf( '%s/%s', $HOME, $CONFIG->dir->repository );
+
+    $app->workdir( sprintf '%s/%s', $repository, $CONFIG->dir->work );
+
     my $artifact = OS::Package::Artifact->new(
         distfile   => basename( $config->{url} ),
         url        => $config->{url},
-        repository => sprintf( '%s/%s', $HOME, $CONFIG->dir->repository ),
+        repository => $repository,
+        workdir    => $app->workdir,
     );
+
+    if ( defined $config->{md5} ) {
+        $artifact->md5( $config->{md5} );
+    }
+
+    if ( defined $config->{sha1} ) {
+        $artifact->sha1( $config->{sha1} );
+    }
 
     $artifact->savefile(
-        sprintf( '%s/%s', $artifact->repository, basename( $config->{url} ) )
-    );
+        sprintf( '%s/%s', $repository, basename( $config->{url} ) ) );
 
     $app->artifact($artifact);
-
-    $app->workdir( sprintf '%s/%s',
-        $artifact->repository, $CONFIG->dir->work );
 
     return $app;
 }
