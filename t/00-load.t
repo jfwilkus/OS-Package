@@ -6,10 +6,10 @@ my @PM = qw(
 	OS::Package::Config
 	OS::Package::Application
 	OS::Package::Artifact
+	OS::Package::Artifact::Role::Clean
     OS::Package::Artifact::Role::Download
     OS::Package::Artifact::Role::Extract
-    OS::Package::Artifact::Factory
-    OS::Package::Build::Configure
+    OS::Package::Application::Factory
 );
 
 foreach my $pm (@PM) {

@@ -34,18 +34,18 @@ sub run {
     my $app = vivify($APP);
 
     if ( $COMMAND eq 'download' ) {
-        $app->download;
+        $app->artifact->download;
 
     }
     elsif ( $COMMAND eq 'extract' ) {
-        $app->extract;
+        $app->artifact->extract;
     }
     elsif ( $COMMAND eq 'build' ) {
-        $app->download;
-        $app->extract;
+        $app->artifact->download;
+        $app->artifact->extract;
     }
     elsif ( $COMMAND eq 'clean' ) {
-        $app->clean;
+        $app->artifact->clean;
     }
 
 }

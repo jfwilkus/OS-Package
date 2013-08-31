@@ -6,6 +6,7 @@ package OS::Package::Application::Factory;
 use Env qw( $HOME );
 use File::Basename;
 use OS::Package::Application;
+use OS::Package::Artifact;
 use OS::Package::Config;
 use OS::Package::Log;
 use YAML::Any qw( LoadFile );
@@ -24,8 +25,6 @@ sub vivify {
 
     my $name = shift;
 
-    my $app = OS::Package::Application->new( name => $name );
-
     my $cfg_file = sprintf '%s/%s/%s.yml', $HOME, $CONFIG->dir->configs,
         lc($name);
 
@@ -36,15 +35,22 @@ sub vivify {
 
     my $config = LoadFile($cfg_file);
 
-    $app->repository( sprintf '%s/%s', $HOME, $CONFIG->dir->repository );
+    my $app = OS::Package::Application->new( name => $name );
 
-    $app->url( $config->{url} );
+    my $artifact = OS::Package::Artifact->new(
+        distfile   => basename( $config->{url} ),
+        url        => $config->{url},
+        repository => sprintf( '%s/%s', $HOME, $CONFIG->dir->repository ),
+    );
 
-    $app->distfile( basename $config->{url} );
+    $artifact->savefile(
+        sprintf( '%s/%s', $artifact->repository, basename( $config->{url} ) )
+    );
 
-    $app->artifact( sprintf '%s/%s', $app->repository, $app->distfile );
+    $app->artifact($artifact);
 
-    $app->workdir( sprintf '%s/%s', $app->repository, $CONFIG->dir->work );
+    $app->workdir( sprintf '%s/%s',
+        $artifact->repository, $CONFIG->dir->work );
 
     return $app;
 }

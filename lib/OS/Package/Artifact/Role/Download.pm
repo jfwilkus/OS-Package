@@ -31,7 +31,7 @@ sub download {
 
     my $response = HTTP::Tiny->new->get( $self->url );
 
-    my $save_file = path( $self->artifact );
+    my $save_file = path( $self->distfile );
 
     $save_file->spew( $response->{content} );
 
