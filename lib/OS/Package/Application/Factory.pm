@@ -44,6 +44,8 @@ sub vivify {
 
     $app->artifact( sprintf '%s/%s', $app->repository, $app->distfile );
 
+    $app->workdir( sprintf '%s/%s', $app->repository, $CONFIG->dir->work );
+
     return $app;
 }
 
