@@ -22,9 +22,17 @@ sub download {
     }
 
     if ( -f $self->savefile ) {
+
         $LOGGER->info( sprintf 'distfile exists: %s', $self->savefile );
-        $self->validate;
-        return;
+
+        if ( $self->validate ) {
+            return;
+        }
+        else {
+            $LOGGER->warn( sprintf 'removing bad distfile: %s',
+                $self->savefile );
+            unlink $self->savefile;
+        }
     }
 
     if ( !-d $self->repository ) {
@@ -41,7 +49,9 @@ sub download {
 
     $save_file->spew( $response->{content} );
 
-    $self->validate;
+    if ( !$self->validate ) {
+        $LOGGER->logcroak( sprintf 'cannot download: %s', $self->url );
+    }
 
     return;
 }
