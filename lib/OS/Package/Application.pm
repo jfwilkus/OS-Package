@@ -7,25 +7,15 @@ package OS::Package::Application;
 # VERSION
 
 use Moo;
-use Types::Standard qw( Str Object );
+use Types::Standard qw( Str InstanceOf );
 use OS::Package::Config;
 
-with qw(
-    OS::Package::Application::Role::Download
-    OS::Package::Application::Role::Extract
-);
-
-has name => ( is => 'rw', isa => Str, required => 1 );
-
-has url => ( is => 'rw', isa => Str );
-
-has distfile => ( is => 'rw', isa => Str );
-
-has artifact => ( is => 'rw', isa => Str );
-
+has archive => ( is => 'rw', isa => InstanceOf ['Archive::Extract'] );
+has artifact   => ( is => 'rw', isa => InstanceOf ['OS::Package::Artifact'] );
+has config     => ( is => 'rw', isa => Str );
+has name       => ( is => 'rw', isa => Str, required => 1 );
 has repository => ( is => 'rw', isa => Str );
-
-has archive => ( is => 'rw', isa => Object );
+has workdir    => ( is => 'rw', isa => Str );
 
 1;
 
@@ -51,4 +41,4 @@ Base directory to store artifacts.
 
 =method archive
 
-The Archive::Tar::Wrapper object of the extracted distfile.
+The Archive::Extract object of the extracted distfile.
