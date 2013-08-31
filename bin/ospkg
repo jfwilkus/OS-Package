@@ -29,5 +29,8 @@ Download the distribution.
 
 Builds the distribution.
 
+=item B<clear>
+
+Removes build artifacts.
 
 =back 
