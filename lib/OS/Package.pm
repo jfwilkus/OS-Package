@@ -7,7 +7,6 @@ package OS::Package;
 # VERSION
 
 use Env qw( $HOME );
-use Data::Dumper;
 use File::Basename;
 use OS::Package::Application;
 use OS::Package::Config;
@@ -35,7 +34,7 @@ sub run {
     my $app = vivify($APP);
 
     if ( $COMMAND eq 'download' ) {
-        _download($app);
+        $app->download;
 
     }
     elsif ( $COMMAND eq 'extract' ) {
@@ -43,6 +42,10 @@ sub run {
     }
     elsif ( $COMMAND eq 'build' ) {
         $app->download;
+        $app->extract;
+    }
+    elsif ( $COMMAND eq 'clean' ) {
+        $app->clean;
     }
 
 }
