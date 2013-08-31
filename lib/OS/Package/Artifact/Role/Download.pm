@@ -1,15 +1,14 @@
 use v5.14.0;
 use warnings;
 
-package OS::Package::Application::Role::Download;
+package OS::Package::Artifact::Role::Download;
 
-use Carp qw(croak);
+use File::Path qw( make_path );
+use FileHandle;
 use HTTP::Tiny;
+use OS::Package::Log;
 use Path::Tiny;
 use Role::Tiny;
-use FileHandle;
-use File::Path qw( make_path );
-use OS::Package::Log;
 
 # ABSTRACT: Default Abstract Description, Please Change.
 # VERSION
@@ -19,7 +18,7 @@ sub download {
     my $self = shift;
 
     if ( !$self->url ) {
-        croak 'did not define url';
+        $LOGGER->logcroak('did not define url');
     }
 
     if ( !-d $self->repository ) {
