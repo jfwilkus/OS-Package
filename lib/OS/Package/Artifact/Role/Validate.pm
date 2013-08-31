@@ -16,11 +16,15 @@ sub validate {
     my $self = shift;
 
     if ( defined $self->md5 ) {
-        $self->validate_md5;
+        if ( !$self->validate_md5 ) {
+            return 0;
+        }
     }
 
     if ( defined $self->sha1 ) {
-        $self->validate_sha1;
+        if ( !$self->validate_sha1 ) {
+            return 0;
+        }
     }
 
     return 1;
