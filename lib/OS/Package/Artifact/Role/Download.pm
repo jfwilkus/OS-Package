@@ -21,6 +21,12 @@ sub download {
         $LOGGER->logcroak('did not define url');
     }
 
+    if ( -f $self->savefile ) {
+        $LOGGER->info( sprintf 'distfile exists: %s', $self->savefile );
+        $self->validate;
+        return;
+    }
+
     if ( !-d $self->repository ) {
         make_path $self->repository;
         $LOGGER->info( sprintf 'creating repository directory: %s',
@@ -31,9 +37,11 @@ sub download {
 
     my $response = HTTP::Tiny->new->get( $self->url );
 
-    my $save_file = path( $self->distfile );
+    my $save_file = path( $self->savefile );
 
     $save_file->spew( $response->{content} );
+
+    $self->validate;
 
     return;
 }
