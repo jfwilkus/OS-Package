@@ -3,6 +3,9 @@ use warnings;
 
 package OS::Package::Application::Factory;
 
+# ABSTRACT: Initialize a OS::Package::Application object.
+# VERSION
+
 use Env qw( $HOME );
 use File::Basename;
 use OS::Package::Application;
@@ -17,9 +20,6 @@ our @EXPORT = qw( vivify );
 
 local $YAML::UseCode  = 0 if !defined $YAML::UseCode;
 local $YAML::LoadCode = 0 if !defined $YAML::LoadCode;
-
-# ABSTRACT: Default Abstract Description, Please Change.
-# VERSION
 
 sub vivify {
 

@@ -3,7 +3,7 @@ use warnings;
 
 package OS::Package::Artifact;
 
-# ABSTRACT: Default Abstract Description, Please Change.
+# ABSTRACT: OS::Package::Artifact object.
 # VERSION
 
 use Moo;

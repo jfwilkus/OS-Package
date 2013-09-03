@@ -3,7 +3,7 @@ use warnings;
 
 package OS::Package::Artifact::Role::Validate;
 
-# ABSTRACT: Default Abstract Description, Please Change.
+# ABSTRACT: Provides the validation methods for Artifact role.
 # VERSION
 
 use Digest::MD5;
@@ -67,3 +67,17 @@ sub validate_sha1 {
 }
 
 1;
+
+=method validate
+
+Provides the validate method which is a wrapper for validate_md5 and validate_sha1.
+
+=method validate_md5
+
+Validates the MD5 hash of the downloaded save file to the application configuration
+file.
+
+=method validate_sha1
+
+Validates the SHA1 hash of the downloaded save file to the application configuration
+file.

@@ -3,7 +3,7 @@ use warnings;
 
 package OS::Package;
 
-# ABSTRACT: Default Abstract Description, Please Change.
+# ABSTRACT: OS::Package application initialization.
 # VERSION
 
 use Env qw( $HOME );
@@ -51,3 +51,7 @@ sub run {
 }
 
 1;
+
+=method run
+
+Processes command line arguments and runs the application.

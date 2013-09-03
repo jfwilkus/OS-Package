@@ -3,13 +3,13 @@ use warnings;
 
 package OS::Package::Config;
 
+# ABSTRACT: Load OS::Package configuration object.
+# VERSION
+
 use YAML::Any qw( LoadFile );
 use File::ShareDir qw(dist_file);
 use Hash::AsObject;
 use base qw(Exporter);
-
-# ABSTRACT: Default Abstract Description, Please Change.
-# VERSION
 
 our @EXPORT = qw( $CONFIG );
 

@@ -9,7 +9,7 @@ use OS::Package::Config;
 use OS::Package::Log;
 use Role::Tiny;
 
-# ABSTRACT: Default Abstract Description, Please Change.
+# ABSTRACT: Provides the extract method for Artifact role.
 # VERSION
 
 local $Archive::Extract::PREFER_BIN = 1;

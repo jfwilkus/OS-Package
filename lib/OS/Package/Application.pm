@@ -3,7 +3,7 @@ use warnings;
 
 package OS::Package::Application;
 
-# ABSTRACT: Default Abstract Description, Please Change.
+# ABSTRACT: OS::Package::Application object.
 # VERSION
 
 use Moo;
@@ -21,22 +21,3 @@ has artifact => ( is => 'rw', isa => InstanceOf ['OS::Package::Artifact'] );
 
 The name of the application.
 
-=method url
-
-The URL to download the application.
-
-=method distfile
-
-The name of the distribution file.
-
-=method artifact
-
-The location of the distribution file on local filesystem.
-
-=method repository
-
-Base directory to store artifacts.
-
-=method archive
-
-The Archive::Extract object of the extracted distfile.

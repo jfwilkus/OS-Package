@@ -3,7 +3,7 @@ use warnings;
 
 package OS::Package::Artifact::Role::Clean;
 
-# ABSTRACT: Default Abstract Description, Please Change.
+# ABSTRACT: Provides the clean method for Artifact role.
 # VERSION
 
 use File::Path qw( remove_tree );
@@ -28,3 +28,7 @@ sub clean {
 }
 
 1;
+
+=method clean
+
+Provides method to clean the work directory.

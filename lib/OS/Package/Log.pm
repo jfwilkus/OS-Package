@@ -7,7 +7,7 @@ use File::ShareDir qw(dist_file);
 use base qw(Exporter);
 use Log::Log4perl;
 
-# ABSTRACT: Default Abstract Description, Please Change.
+# ABSTRACT: Load OS::Package LOGGER object.
 # VERSION
 
 our @EXPORT = qw( $LOGGER );

@@ -10,7 +10,7 @@ use OS::Package::Log;
 use Path::Tiny;
 use Role::Tiny;
 
-# ABSTRACT: Default Abstract Description, Please Change.
+# ABSTRACT: Provides the download method for Artifact role.
 # VERSION
 
 sub download {
