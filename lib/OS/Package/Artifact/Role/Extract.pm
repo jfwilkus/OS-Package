@@ -22,7 +22,7 @@ sub extract {
         make_path $self->workdir;
     }
 
-    my $archive = Archive::Extract->new( archive => $self->artifact );
+    my $archive = Archive::Extract->new( archive => $self->savefile );
 
     $LOGGER->info( sprintf 'extracting archive: %s', $self->distfile );
 
