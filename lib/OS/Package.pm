@@ -33,6 +33,8 @@ sub run {
 
     my $app = vivify($APP);
 
+    $LOGGER->info(sprintf 'processing: %s %s', $app->name, $app->version );
+
     if ( $COMMAND eq 'download' ) {
         $app->artifact->download;
 
@@ -43,6 +45,7 @@ sub run {
     elsif ( $COMMAND eq 'build' ) {
         $app->artifact->download;
         $app->artifact->extract;
+        $app->configure;
     }
     elsif ( $COMMAND eq 'clean' ) {
         $app->artifact->clean;
