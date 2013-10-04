@@ -4,7 +4,7 @@ use warnings;
 package OS::Package::Artifact::Role::Extract;
 
 use Archive::Extract;
-use File::Path qw( make_path );
+use File::Path qw( make_path remove_tree );
 use OS::Package::Config;
 use OS::Package::Log;
 use Role::Tiny;
@@ -17,6 +17,12 @@ local $Archive::Extract::PREFER_BIN = 1;
 sub extract {
 
     my $self = shift;
+
+    if ( -d $self->workdir ) {
+        $LOGGER->info( sprintf 'removing existing workdir: %s',
+            $self->workdir );
+        remove_tree $self->workdir;
+    }
 
     if ( !-d $self->workdir ) {
         make_path $self->workdir;
