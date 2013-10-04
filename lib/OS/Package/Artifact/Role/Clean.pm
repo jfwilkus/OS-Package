@@ -18,7 +18,7 @@ sub clean {
     }
 
     if ( -d $self->workdir ) {
-        $LOGGER->info( sprintf 'removing work directory: %s',
+        $LOGGER->info( sprintf 'cleaning work directory: %s',
             $self->workdir );
 
         remove_tree $self->workdir;
