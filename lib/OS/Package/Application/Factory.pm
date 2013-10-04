@@ -35,11 +35,11 @@ sub vivify {
 
     my $config = LoadFile($cfg_file);
 
-    my $app = OS::Package::Application->new( name => $name );
+    my $app = OS::Package::Application->new( name => $name, version => $config->{version} );
 
     my $repository = sprintf( '%s/%s', $HOME, $CONFIG->dir->repository );
 
-    $app->workdir( sprintf '%s/%s', $repository, $CONFIG->dir->work );
+    $app->workdir( sprintf '%s/%s', $HOME, $CONFIG->dir->work );
 
     my $artifact = OS::Package::Artifact->new(
         distfile   => basename( $config->{url} ),
