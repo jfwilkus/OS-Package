@@ -35,11 +35,15 @@ sub vivify {
 
     my $config = LoadFile($cfg_file);
 
-    my $app = OS::Package::Application->new( name => $name, version => $config->{version} );
+    my $app = OS::Package::Application->new(
+        name    => $name,
+        version => $config->{version}
+    );
 
     my $repository = sprintf( '%s/%s', $HOME, $CONFIG->dir->repository );
 
     $app->workdir( sprintf '%s/%s', $HOME, $CONFIG->dir->work );
+    $app->fakeroot( sprintf '%s/%s', $HOME, $CONFIG->dir->fakeroot );
 
     my $artifact = OS::Package::Artifact->new(
         distfile   => basename( $config->{url} ),
@@ -55,6 +59,20 @@ sub vivify {
     if ( defined $config->{sha1} ) {
         $artifact->sha1( $config->{sha1} );
     }
+
+    my @configure_args;
+
+    if ( defined $config->{configure}{all} ) {
+
+        push @configure_args, @{ $config->{configure}{all} };
+
+    }
+
+    if ( defined $config->{prune}{directories} ) {
+        $app->prune_dirs( $config->{prune}{directories} );
+    }
+
+    $app->configure_args( \@configure_args );
 
     $artifact->savefile(
         sprintf( '%s/%s', $repository, basename( $config->{url} ) ) );
