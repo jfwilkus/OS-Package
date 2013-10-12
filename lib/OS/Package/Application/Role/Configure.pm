@@ -37,6 +37,14 @@ sub configure {
 
             my @command = ($cmd);
 
+            if ( $self->configure_args ) {
+
+                $LOGGER->debug( sprintf 'configure_args: %s',
+                    join( ', ', @{ $self->configure_args } ) );
+
+                push @command, @{ $self->configure_args };
+            }
+
             my ($success,    $error_message, $full_buf,
                 $stdout_buf, $stderr_buf
             ) = run( command => \@command );
