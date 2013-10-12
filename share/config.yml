@@ -2,4 +2,5 @@ dir:
   repository: ospkg/distfiles
   configs: ospkg/configs
   work: ospkg/work
+  fakeroot: ospkg/fakeroot
 
