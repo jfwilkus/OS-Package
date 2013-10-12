@@ -4,8 +4,8 @@ use strict;
 use warnings;
 
 # VERSION
-# ABSTRACT: Default Abstract Description, Please Change.
-# PODNAME: OS::Package::ospkg
+# ABSTRACT: OS Package Management System
+# PODNAME: ospkg
 
 use OS::Package;
 
@@ -29,8 +29,13 @@ Download the distribution.
 
 Builds the distribution.
 
-=item B<clear>
+=item B<clean>
 
 Removes build artifacts.
+
+=item B<version>
+
+Prints version and exits.
+
 
 =back 
