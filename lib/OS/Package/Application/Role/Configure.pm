@@ -8,7 +8,7 @@ package OS::Package::Application::Role::Configure;
 
 use OS::Package::Log;
 use IPC::Cmd qw( can_run run );
-use Env qw( CC );
+use Env qw( $CC );
 use Try::Tiny;
 use Role::Tiny;
 
