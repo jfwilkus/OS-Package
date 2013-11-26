@@ -72,6 +72,10 @@ sub vivify {
         $app->prune_dirs( $config->{prune}{directories} );
     }
 
+    if ( defined $config->{prune}{files} ) {
+        $app->prune_files( $config->{prune}{files} );
+    }
+
     $app->configure_args( \@configure_args );
 
     $artifact->savefile(
