@@ -28,8 +28,18 @@ sub prune {
 
             my $pdir = sprintf( '%s/%s', $self->fakeroot, $dir );
             $LOGGER->debug( sprintf 'removing directory: %s', $pdir );
-            
+
             remove_tree $pdir;
+        }
+
+        $LOGGER->info( sprintf 'prune files: %s', $self->name );
+
+        foreach my $file ( @{ $self->prune_files } ) {
+
+            my $pfile = sprintf( '%s/%s', $self->fakeroot, $file );
+            $LOGGER->debug( sprintf 'removing file: %s', $pfile );
+
+            unlink $pfile;
         }
 
     }
