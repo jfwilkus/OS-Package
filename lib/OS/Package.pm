@@ -67,6 +67,7 @@ sub run {
         $app->prune;
     }
     elsif ( $COMMAND eq 'clean' ) {
+        $app->clean;
         $app->artifact->clean;
     }
 
