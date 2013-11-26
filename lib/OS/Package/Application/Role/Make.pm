@@ -46,6 +46,8 @@ sub make {
         map { $LOGGER->debug($_) } @{$full_buf};
 
     }
+
+    return;
 }
 
 sub make_install {
@@ -87,6 +89,8 @@ sub make_install {
         map { $LOGGER->debug($_) } @{$full_buf};
 
     }
+
+    return;
 }
 
 1;
