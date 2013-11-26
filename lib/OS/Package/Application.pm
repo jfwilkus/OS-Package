@@ -14,6 +14,7 @@ with qw(
     OS::Package::Application::Role::Configure
     OS::Package::Application::Role::Make
     OS::Package::Application::Role::Prune
+    OS::Package::Application::Role::Clean
 );
 
 has config   => ( is => 'rw', isa => Str );
@@ -24,6 +25,7 @@ has fakeroot => ( is => 'rw', isa => Str );
 has artifact => ( is => 'rw', isa => InstanceOf ['OS::Package::Artifact'] );
 has configure_args => ( is => 'rw', isa => ArrayRef );
 has prune_dirs     => ( is => 'rw', isa => ArrayRef );
+has prune_files     => ( is => 'rw', isa => ArrayRef );
 
 1;
 
