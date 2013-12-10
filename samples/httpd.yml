@@ -1,0 +1,43 @@
+name: httpd
+description: Apache HTTP Server
+version: 2.2.25
+homepage: http://httpd.apache.org
+url: http://archive.apache.org/dist/httpd/httpd-2.2.25.tar.gz
+sha1: 1e793eb477c65dfa58cdf47f7bf78d8cdff58091
+md5: ea9d400f20f19b585773cf42b9ce49c7
+
+compile:
+  cflags:
+    solaris:
+      64: -xtarget=generic -m64 -xO4
+
+configure:
+  all:
+    - --prefix=/opt/sf/apache
+    - --enable-rewrite
+    - --enable-ssl
+    - --enable-proxy
+    - --enable-proxy-http
+    - --enable-proxy-balancer
+    - --enable-cache
+    - --enable-disk-cache
+    - --with-mpm=prefork
+    - --enable-mods-shared=all
+
+maintainer:
+  author: James F Wilkus
+  email: james@wilkustech.com
+  nickname: jfwilkus
+
+prune:
+  directories:
+    - /opt/sf/apache/manual
+    - /opt/sf/apache/man
+    - /opt/sf/apache/include
+    - /opt/sf/apache/build
+    - /opt/sf/apache/cgi-bin
+    - /opt/sf/apache/conf/extra
+    - /opt/sf/apache/conf/original
+  files:
+    - /opt/sf/apache/error/README
+    - /opt/sf/apache/bin/apxs
