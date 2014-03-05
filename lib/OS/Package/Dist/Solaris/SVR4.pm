@@ -9,15 +9,15 @@ package OS::Package::Dist::Solaris::SVR4;
 use Moo;
 
 with qw(
-	OS::Package::Dist::Role::Package
+    OS::Package::Dist::Role::Package
 );
 
 sub _generate_pkginfo {
-	return 1;
+  return 1;
 }
 
 sub _generate_prototype {
-	return 1;
+  return 1;
 }
 
 sub _generate_package {
@@ -25,7 +25,7 @@ sub _generate_package {
 }
 
 sub create {
-	return 1;
+  return 1;
 }
 
 1;
