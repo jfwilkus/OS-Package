@@ -39,7 +39,7 @@ sub extract {
     $LOGGER->info( sprintf 'extracted archive: %s',
         $self->archive->extract_path );
 
-    return;
+    return 1;
 
 }
 

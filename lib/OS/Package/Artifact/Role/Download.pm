@@ -26,7 +26,7 @@ sub download {
         $LOGGER->info( sprintf 'distfile exists: %s', $self->savefile );
 
         if ( $self->validate ) {
-            return;
+            return 1;
         }
         else {
             $LOGGER->warn( sprintf 'removing bad distfile: %s',
@@ -41,7 +41,7 @@ sub download {
             $self->repository );
     }
 
-    $LOGGER->info( sprintf 'downloading %s', $self->distfile );
+    $LOGGER->info( sprintf 'downloading: %s', $self->distfile );
 
     my $response = HTTP::Tiny->new->get( $self->url );
 
@@ -53,7 +53,7 @@ sub download {
         $LOGGER->logcroak( sprintf 'cannot download: %s', $self->url );
     }
 
-    return;
+    return 1;
 }
 
 1;
