@@ -20,31 +20,40 @@ sub prune {
         return;
     }
 
-    if ( -d $self->fakeroot ) {
+    if ( !-d $self->fakeroot ) {
+        $LOGGER->warn('fakeroot does not exist');
+        return 1;
+    }
 
-        $LOGGER->info( sprintf 'prune directories: %s', $self->name );
-
-        foreach my $dir ( @{ $self->prune_dirs } ) {
-
-            my $pdir = sprintf( '%s/%s', $self->fakeroot, $dir );
-            $LOGGER->debug( sprintf 'removing directory: %s', $pdir );
-
-            remove_tree $pdir;
-        }
+    if ( defined $self->prune_files ) {
 
         $LOGGER->info( sprintf 'prune files: %s', $self->name );
 
         foreach my $file ( @{ $self->prune_files } ) {
 
-            my $pfile = sprintf( '%s/%s', $self->fakeroot, $file );
+            my $pfile =
+                sprintf( '%s/%s/%s', $self->fakeroot, $self->prefix, $file );
             $LOGGER->debug( sprintf 'removing file: %s', $pfile );
 
             unlink $pfile;
         }
-
     }
 
-    return;
+    if ( defined $self->prune_dirs ) {
+
+        $LOGGER->info( sprintf 'prune directories: %s', $self->name );
+
+        foreach my $dir ( @{ $self->prune_dirs } ) {
+
+            my $pdir =
+                sprintf( '%s/%s/%s', $self->fakeroot, $self->prefix, $dir );
+            $LOGGER->debug( sprintf 'removing directory: %s', $pdir );
+
+            remove_tree $pdir;
+        }
+    }
+
+    return 1;
 }
 
 1;
