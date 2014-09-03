@@ -10,8 +10,8 @@ use Env qw( $HOME );
 use File::Basename;
 use OS::Package::Application;
 use OS::Package::Artifact;
-use OS::Package::Config;
-use OS::Package::Log;
+use OS::Package::Config qw( $OSPKG_CONFIG );
+use OS::Package::Log qw( $LOGGER );
 use YAML::Any qw( LoadFile );
 
 use base qw(Exporter);
@@ -25,11 +25,11 @@ sub vivify {
 
     my $name = shift;
 
-    my $cfg_file = sprintf '%s/%s/%s.yml', $HOME, $CONFIG->dir->configs,
+    my $cfg_file = sprintf '%s/%s/%s.yml', $HOME, $OSPKG_CONFIG->dir->configs,
         lc($name);
 
     if ( !-f $cfg_file ) {
-        $LOGGER->logcroak( sprintf 'cannot file configuration file %s for %s',
+        $LOGGER->logcroak( sprintf 'cannot find configuration file %s for %s',
             $cfg_file, $name );
     }
 
@@ -37,13 +37,31 @@ sub vivify {
 
     my $app = OS::Package::Application->new(
         name    => $name,
-        version => $config->{version}
+        version => $config->{version},
+        prefix  => $config->{prefix}
     );
 
-    my $repository = sprintf( '%s/%s', $HOME, $CONFIG->dir->repository );
+    my $repository =
+        sprintf( '%s/%s', $HOME, $OSPKG_CONFIG->dir->repository );
 
-    $app->workdir( sprintf '%s/%s', $HOME, $CONFIG->dir->work );
-    $app->fakeroot( sprintf '%s/%s', $HOME, $CONFIG->dir->fakeroot );
+    $app->workdir( sprintf '%s/%s', $HOME, $OSPKG_CONFIG->dir->work );
+    $app->fakeroot( sprintf '%s/%s', $HOME, $OSPKG_CONFIG->dir->fakeroot );
+
+    if ( defined $config->{build} ) {
+        $app->install( $config->{build} );
+    }
+
+    if ( defined $config->{prune}{directories} ) {
+        $app->prune_dirs( $config->{prune}{directories} );
+    }
+
+    if ( defined $config->{prune}{files} ) {
+        $app->prune_files( $config->{prune}{files} );
+    }
+
+    if ( !defined $config->{url} ) {
+        return $app;
+    }
 
     my $artifact = OS::Package::Artifact->new(
         distfile   => basename( $config->{url} ),
@@ -59,24 +77,6 @@ sub vivify {
     if ( defined $config->{sha1} ) {
         $artifact->sha1( $config->{sha1} );
     }
-
-    my @configure_args;
-
-    if ( defined $config->{configure}{all} ) {
-
-        push @configure_args, @{ $config->{configure}{all} };
-
-    }
-
-    if ( defined $config->{prune}{directories} ) {
-        $app->prune_dirs( $config->{prune}{directories} );
-    }
-
-    if ( defined $config->{prune}{files} ) {
-        $app->prune_files( $config->{prune}{files} );
-    }
-
-    $app->configure_args( \@configure_args );
 
     $artifact->savefile(
         sprintf( '%s/%s', $repository, basename( $config->{url} ) ) );
