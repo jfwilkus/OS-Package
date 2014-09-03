@@ -60,15 +60,20 @@ sub run {
     }
     elsif ( $COMMAND eq 'build' ) {
 
-        $app->artifact->download
-            || ( $LOGGER->fatal('download failed') && die );
+        if ( defined $app->artifact ) {
+            $app->artifact->download
+                || ( $LOGGER->fatal('download failed') && die );
 
-        $app->artifact->extract
-            || ( $LOGGER->fatal('extract failed') && die );
+            $app->artifact->extract
+                || ( $LOGGER->fatal('extract failed') && die );
+        }
 
         $app->build || ( $LOGGER->fatal('build failed') && die );
 
         $app->prune || ( $LOGGER->fatal('prune failed') && die );
+    }
+    elsif ( $COMMAND eq 'prune' ) {
+        $app->prune;
     }
     elsif ( $COMMAND eq 'clean' ) {
 
