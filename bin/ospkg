@@ -33,9 +33,13 @@ Builds the distribution.
 
 Removes build artifacts.
 
+=item B<prune>
+
+Prunes files and directories from build.
+
 =item B<version>
 
 Prints version and exits.
 
 
-=back 
+=back
