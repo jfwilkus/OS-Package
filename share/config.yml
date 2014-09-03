@@ -3,4 +3,7 @@ dir:
   configs: ospkg/configs
   work: ospkg/work
   fakeroot: ospkg/fakeroot
+perms:
+  user: root
+  group: root
 
