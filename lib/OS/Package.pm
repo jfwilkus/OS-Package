@@ -59,14 +59,19 @@ sub run {
         $app->artifact->extract;
     }
     elsif ( $COMMAND eq 'build' ) {
-        $app->artifact->download;
-        $app->artifact->extract;
-        $app->configure;
-        $app->make;
-        $app->make_install;
-        $app->prune;
+
+        $app->artifact->download
+            || ( $LOGGER->fatal('download failed') && die );
+
+        $app->artifact->extract
+            || ( $LOGGER->fatal('extract failed') && die );
+
+        $app->build || ( $LOGGER->fatal('build failed') && die );
+
+        $app->prune || ( $LOGGER->fatal('prune failed') && die );
     }
     elsif ( $COMMAND eq 'clean' ) {
+
         $app->clean;
         $app->artifact->clean;
     }
