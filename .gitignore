@@ -1,3 +1,4 @@
 OS-Package-*
 .build
 build.log
+tmp
