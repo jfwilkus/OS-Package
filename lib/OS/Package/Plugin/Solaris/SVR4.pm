@@ -1,7 +1,7 @@
 use v5.14.0;
 use warnings;
 
-package OS::Package::Dist::Solaris::SVR4;
+package OS::Package::Plugin::Solaris::SVR4;
 
 # ABSTRACT: Default Abstract Description, Please Change.
 # VERSION
