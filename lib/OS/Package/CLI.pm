@@ -1,7 +1,7 @@
 use v5.14.0;
 use warnings;
 
-package OS::Package;
+package OS::Package::CLI;
 
 # ABSTRACT: OS::Package application initialization.
 # VERSION
@@ -61,6 +61,7 @@ sub run {
     elsif ( $COMMAND eq 'build' ) {
 
         if ( defined $app->artifact ) {
+
             $app->artifact->download
                 || ( $LOGGER->fatal('download failed') && die );
 
