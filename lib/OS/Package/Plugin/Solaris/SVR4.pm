@@ -8,9 +8,7 @@ package OS::Package::Plugin::Solaris::SVR4;
 
 use Moo;
 
-with qw(
-    OS::Package::Dist::Role::Package
-);
+with 'OS::Package::Plugin::Role::Package';
 
 sub _generate_pkginfo {
   return 1;
