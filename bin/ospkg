@@ -7,9 +7,9 @@ use warnings;
 # ABSTRACT: OS Package Management System
 # PODNAME: ospkg
 
-use OS::Package;
+use OS::Package::CLI;
 
-OS::Package->run() unless caller();
+OS::Package::CLI->run() unless caller();
 
 1;
 
