@@ -8,6 +8,7 @@ package OS::Package::Application::Role::Build;
 
 use OS::Package::Log;
 use File::Basename qw( basename dirname );
+use File::Path qw( make_path );
 use IPC::Cmd qw( can_run run );
 use Env qw( $CC );
 use File::Temp;
@@ -23,13 +24,21 @@ sub build {
 
     my $temp_sh = sprintf '%s/install.sh', $self->workdir;
 
-    my $vars = { FAKEROOT => $self->fakeroot, PREFIX => $self->prefix };
+    my $vars = {
+        FAKEROOT => $self->fakeroot,
+        WORKDIR  => $self->workdir,
+        PREFIX   => $self->prefix
+    };
 
     if ( defined $self->install ) {
         $template->spew( $self->install );
     }
     else {
         return 1;
+    }
+
+    if ( ! -d $self->fakeroot ) {
+        make_path $self->fakeroot;
     }
 
     my $tt = Template->new( { INCLUDE_PATH => dirname($template) } );
