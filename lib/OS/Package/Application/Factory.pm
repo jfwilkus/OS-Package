@@ -47,6 +47,8 @@ sub vivify {
     $app->workdir( sprintf '%s/%s', $HOME, $OSPKG_CONFIG->dir->work );
     $app->fakeroot( sprintf '%s/%s', $HOME, $OSPKG_CONFIG->dir->fakeroot );
 
+    # Set fakeroot to workdir if build procedure is not defined.
+    # Assume it's just an archive that must be extracted.
     if ( defined $config->{build} ) {
         $app->install( $config->{build} );
     }
