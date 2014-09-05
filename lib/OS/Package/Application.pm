@@ -7,7 +7,7 @@ package OS::Package::Application;
 # VERSION
 
 use Moo;
-use Types::Standard qw( Str InstanceOf ArrayRef );
+use Types::Standard qw( Str InstanceOf ArrayRef Object );
 use OS::Package::Config;
 
 with qw(
@@ -16,17 +16,14 @@ with qw(
     OS::Package::Application::Role::Clean
 );
 
-has config => ( is => 'rw', isa => Str );
+has [qw/name version prefix/]     => ( is => 'rw', isa => Str, required => 1 );
+has [qw/config install workdir fakeroot/] => ( is => 'rw', isa => Str );
 
-has install  => ( is => 'rw', isa => Str );
-has name     => ( is => 'rw', isa => Str, required => 1 );
-has version  => ( is => 'rw', isa => Str, required => 1 );
-has prefix   => ( is => 'rw', isa => Str, required => 1 );
-has workdir  => ( is => 'rw', isa => Str );
-has fakeroot => ( is => 'rw', isa => Str );
 has artifact => ( is => 'rw', isa => InstanceOf ['OS::Package::Artifact'] );
-has prune_dirs  => ( is => 'rw', isa => ArrayRef );
-has prune_files => ( is => 'rw', isa => ArrayRef );
+
+has package => ( is => 'rw', isa => Object );
+
+has [qw/prune_dirs prune_files/]  => ( is => 'rw', isa => ArrayRef );
 
 1;
 
