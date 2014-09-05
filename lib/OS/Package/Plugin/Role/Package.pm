@@ -7,10 +7,8 @@ package OS::Package::Plugin::Role::Package;
 # VERSION
 
 use Moo::Role;
-use Types::Standard qw( Str Int );
+use Types::Standard qw( Str );
 
 has 'name' => ( is => 'rw', isa => Str, required => 1 );
-has 'architecture' => ( is => 'rw', isa => Str, required => 1 );
-has 'bitness' => ( is => 'rw', isa => Int, required => 1 );
 
 1;
