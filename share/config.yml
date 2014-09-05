@@ -6,4 +6,6 @@ dir:
 perms:
   user: root
   group: root
-
+plugins:
+  solaris:
+    "2.10": "OS::Package::Plugin::Solaris::SVR4"
