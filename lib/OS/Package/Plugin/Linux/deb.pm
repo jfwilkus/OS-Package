@@ -8,6 +8,6 @@ package OS::Package::Plugin::Linux::deb;
 
 use Moo;
 
-with 'OS::Package::Plugin::Role::Package';
+extends 'OS::Package';
 
 1;
