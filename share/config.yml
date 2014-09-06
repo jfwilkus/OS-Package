@@ -3,9 +3,10 @@ dir:
   configs: ospkg/configs
   work: ospkg/work
   fakeroot: ospkg/fakeroot
-perms:
+package:
   user: root
   group: root
+  category: application
 plugins:
   solaris:
     "2.10": "OS::Package::Plugin::Solaris::SVR4"
