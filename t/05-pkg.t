@@ -1,19 +1,13 @@
 use Test::More;
 
-use OS::Package::Plugin::Solaris::SVR4;
+use_ok('OS::Package');
 
-my $name    = 'demoApp';
-my $version = '1.1.1';
-
-my $app = OS::Package::Plugin::Solaris::SVR4->new(
-    name         => $name,
-    version      => $version,
-    architecture => 'sparc',
-    bitness      => '64'
+my $pkg = OS::Package->new(
+    name        => 'test package',
+    description => 'test package role'
 );
 
-isa_ok( $app, 'OS::Package::Plugin::Solaris::SVR4' );
-
-is( $app->name, $name );
+is( $pkg->name,        'test package' );
+is( $pkg->description, 'test package role' );
 
 done_testing;
