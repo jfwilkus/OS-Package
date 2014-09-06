@@ -17,7 +17,6 @@ my @PM = qw(
   OS::Package::Maintainer
   OS::Package::Plugin::Linux::deb
   OS::Package::Plugin::Linux::RPM
-  OS::Package::Plugin::Role::Package
   OS::Package::Plugin::Solaris::IPS
   OS::Package::Plugin::Solaris::SVR4
   OS::Package::System
