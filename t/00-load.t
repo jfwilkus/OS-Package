@@ -1,10 +1,11 @@
 use Test::More;
 
 my @PM = qw(
+  OS::Package
   OS::Package::CLI
   OS::Package::Application::Factory
   OS::Package::Application::Role::Build
-  OS::Package::Application::Role::Clean
+  OS::Package::Role::Clean
   OS::Package::Application::Role::Prune
   OS::Package::Application
   OS::Package::Artifact::Role::Clean
