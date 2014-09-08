@@ -10,7 +10,7 @@ use OS::Package::Log;
 use File::Basename qw( basename dirname );
 use File::Path qw( make_path );
 use IPC::Cmd qw( can_run run );
-use Env qw( $CC );
+use Env qw( $CC $HOME );
 use File::Temp;
 use Try::Tiny;
 use Role::Tiny;
@@ -65,6 +65,8 @@ sub build {
         }
         return 2;
     }
+
+    chdir $HOME;
 
     return 1;
 }
