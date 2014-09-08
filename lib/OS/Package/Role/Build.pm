@@ -25,7 +25,7 @@ sub build {
     my $temp_sh = sprintf '%s/install.sh', $self->artifact->workdir;
 
     my $vars = {
-        FAKEROOT => $self->application->fakeroot,
+        FAKEROOT => $self->fakeroot,
         WORKDIR  => $self->artifact->workdir,
         PREFIX   => $self->prefix
     };
@@ -37,8 +37,8 @@ sub build {
         return 1;
     }
 
-    if ( ! -d $self->application->fakeroot ) {
-        make_path $self->application->fakeroot;
+    if ( ! -d $self->fakeroot ) {
+        make_path $self->fakeroot;
     }
 
     my $tt = Template->new( { INCLUDE_PATH => dirname($template) } );
