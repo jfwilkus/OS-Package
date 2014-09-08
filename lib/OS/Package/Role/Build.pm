@@ -1,7 +1,7 @@
 use v5.14.0;
 use warnings;
 
-package OS::Package::Application::Role::Build;
+package OS::Package::Role::Build;
 
 # ABSTRACT: Default Abstract Description, Please Change.
 # VERSION
@@ -22,11 +22,11 @@ sub build {
 
     my $template = Path::Tiny->tempfile;
 
-    my $temp_sh = sprintf '%s/install.sh', $self->workdir;
+    my $temp_sh = sprintf '%s/install.sh', $self->artifact->workdir;
 
     my $vars = {
-        FAKEROOT => $self->fakeroot,
-        WORKDIR  => $self->workdir,
+        FAKEROOT => $self->application->fakeroot,
+        WORKDIR  => $self->artifact->workdir,
         PREFIX   => $self->prefix
     };
 
@@ -37,8 +37,8 @@ sub build {
         return 1;
     }
 
-    if ( ! -d $self->fakeroot ) {
-        make_path $self->fakeroot;
+    if ( ! -d $self->application->fakeroot ) {
+        make_path $self->application->fakeroot;
     }
 
     my $tt = Template->new( { INCLUDE_PATH => dirname($template) } );

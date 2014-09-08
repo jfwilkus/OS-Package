@@ -1,7 +1,7 @@
 use v5.14.0;
 use warnings;
 
-package OS::Package::Application::Role::Prune;
+package OS::Package::Role::Prune;
 
 # ABSTRACT: Default Abstract Description, Please Change.
 # VERSION
@@ -15,12 +15,12 @@ sub prune {
 
     my $self = shift;
 
-    if ( !defined $self->fakeroot ) {
+    if ( !defined $self->application->fakeroot ) {
         $LOGGER->warn('fakeroot is not defined');
         return;
     }
 
-    if ( !-d $self->fakeroot ) {
+    if ( !-d $self->application->fakeroot ) {
         $LOGGER->warn('fakeroot does not exist');
         return 1;
     }
@@ -32,7 +32,7 @@ sub prune {
         foreach my $file ( @{ $self->prune_files } ) {
 
             my $pfile =
-                sprintf( '%s/%s/%s', $self->fakeroot, $self->prefix, $file );
+                sprintf( '%s/%s/%s', $self->application->fakeroot, $self->prefix, $file );
             $LOGGER->debug( sprintf 'removing file: %s', $pfile );
 
             unlink $pfile;
@@ -46,7 +46,7 @@ sub prune {
         foreach my $dir ( @{ $self->prune_dirs } ) {
 
             my $pdir =
-                sprintf( '%s/%s/%s', $self->fakeroot, $self->prefix, $dir );
+                sprintf( '%s/%s/%s', $self->application->fakeroot, $self->prefix, $dir );
             $LOGGER->debug( sprintf 'removing directory: %s', $pdir );
 
             remove_tree $pdir;
