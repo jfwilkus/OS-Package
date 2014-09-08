@@ -12,9 +12,11 @@ use Types::Standard qw( Str ArrayRef InstanceOf );
 
 with qw(
     OS::Package::Role::Clean
+    OS::Package::Role::Build
+    OS::Package::Role::Prune
 );
 
-has [qw/name description prefix/] =>
+has [qw/name description prefix version/] =>
     ( is => 'rw', isa => Str, required => 1 );
 
 has [qw/config install/] => ( is => 'rw', isa => Str );
