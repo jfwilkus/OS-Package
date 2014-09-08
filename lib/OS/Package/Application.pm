@@ -7,14 +7,17 @@ package OS::Package::Application;
 # VERSION
 
 use Moo;
-use Types::Standard qw( Str );
+use Types::Standard qw( Str InstanceOf );
+use Path::Tiny;
 
-with qw(
-    OS::Package::Application::Role::Build
-    OS::Package::Application::Role::Prune
+has [qw/name version/] => ( is => 'rw', isa => Str, required => 1 );
+
+has fakeroot => (
+    is       => 'rw',
+    isa      => InstanceOf ['Path::Tiny'],
+    required => 1,
+    default  => sub { return Path::Tiny->tempdir }
 );
-
-has [qw/name version fakeroot/] => ( is => 'rw', isa => Str, required => 1 );
 
 1;
 
@@ -28,4 +31,4 @@ The version of the application.
 
 =method fakeroot
 
-The location on the local filesytem where build is staged prior to packaging.
+The location on the local file system where build is staged prior to packaging.
