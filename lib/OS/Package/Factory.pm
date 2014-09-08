@@ -67,7 +67,7 @@ sub vivify {
         }
 
         $pkg = $plugin->new(
-            name        => $config->{name},
+            name        => $config->{pkgname},
             version     => $config->{version},
             prefix      => $config->{prefix},
             description => $config->{description},
