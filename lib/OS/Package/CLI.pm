@@ -72,6 +72,8 @@ sub run {
         $pkg->build || ( $LOGGER->fatal('build failed') && die );
 
         $pkg->prune || ( $LOGGER->fatal('prune failed') && die );
+
+        $pkg->create || ( $LOGGER->fatal('create failed') && die );
     }
     elsif ( $COMMAND eq 'prune' ) {
 
