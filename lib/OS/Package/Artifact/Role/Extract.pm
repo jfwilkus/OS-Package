@@ -18,12 +18,6 @@ sub extract {
 
     my $self = shift;
 
-    if ( -d $self->workdir ) {
-        $LOGGER->info( sprintf 'removing existing workdir: %s',
-            $self->workdir );
-        remove_tree $self->workdir;
-    }
-
     if ( !-d $self->workdir ) {
         make_path $self->workdir;
     }
