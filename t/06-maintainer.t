@@ -1,14 +1,14 @@
 use Test::More;
 use OS::Package::Maintainer;
 
-my $name = 'Test User';
+my $author = 'Test User';
 my $nickname =  'tuser';
 my $email = 'tuser@testco.com';
 my $phone = '555-333-2222';
 my $company = 'Test Co.';
 
 my $maintainer = OS::Package::Maintainer->new(
-    name     => $name,
+    author     => $author,
     nickname => $nickname,
     email    => $email,
     phone    => $phone,
@@ -17,7 +17,7 @@ my $maintainer = OS::Package::Maintainer->new(
 
 isa_ok( $maintainer, 'OS::Package::Maintainer' );
 
-is( $maintainer->name,     $name );
+is( $maintainer->author,     $author );
 is( $maintainer->nickname, $nickname );
 is( $maintainer->email,    $email );
 is( $maintainer->phone,    $phone );

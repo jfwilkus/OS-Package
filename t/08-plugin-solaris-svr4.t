@@ -4,15 +4,16 @@ use Test::More;
 
 use_ok('OS::Package::Plugin::Solaris::SVR4');
 use_ok('OS::Package::Maintainer');
+use_ok('OS::Package::Application');
 
-my $name     = 'Test User';
+my $author   = 'Test User';
 my $nickname = 'tuser';
 my $email    = 'tuser@testco.com';
 my $phone    = '555-333-2222';
 my $company  = 'Test Co.';
 
 my $maintainer = OS::Package::Maintainer->new(
-    name     => $name,
+    author   => $author,
     nickname => $nickname,
     email    => $email,
     phone    => $phone,
@@ -28,10 +29,8 @@ my $cfg = {
     name        => 'testpackage',
     user        => 'root',
     group       => 'root',
-    arch        => 'i386',
     prefix      => '/opt/sf',
     category    => 'application',
-    vendor      => 'test co.',
     description => 'test application',
     version     => '1.0',
     maintainer  => $maintainer,

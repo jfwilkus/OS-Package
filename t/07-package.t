@@ -10,14 +10,14 @@ my $version     = '1.1.1';
 my $prefix      = '/usr/local';
 my $description = 'A demo application';
 
-my $username = 'Test User';
+my $author   = 'Test User';
 my $nickname = 'tuser';
 my $email    = 'tuser@testco.com';
 my $phone    = '555-333-2222';
 my $company  = 'Test Co.';
 
 my $maintainer = OS::Package::Maintainer->new(
-    name     => $username,
+    author   => $author,
     nickname => $nickname,
     email    => $email,
     phone    => $phone,
@@ -42,7 +42,7 @@ isa_ok( $pkg, 'OS::Package' );
 
 is( $pkg->name, $name );
 
-is( $pkg->maintainer->name, $username, 'maintainer is properly defined' );
+is( $pkg->maintainer->author, $author, 'maintainer is properly defined' );
 is( $pkg->system->os, $Config{osname}, 'os is properly defined' );
 
 done_testing;
