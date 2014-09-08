@@ -50,7 +50,7 @@ sub _generate_pkginfo {
     $LOGGER->info('generating: pkginfo');
 
     my $template =
-        dist_file( 'OS::Package', 'plugin/Solaris/SVR4/pkginfo.tt2' );
+        dist_file( 'OS-Package', 'plugin/Solaris/SVR4/pkginfo.tt2' );
 
     my $ttcfg = { INCLUDE_PATH => dirname($template) };
 
