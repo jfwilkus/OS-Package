@@ -1,4 +1,5 @@
-name: perl-modules
+pkgname: perl-modules
+name: Perl Modules
 description: Perl Modules
 version: 5.14.4
 homepage: http://www.cpan.org

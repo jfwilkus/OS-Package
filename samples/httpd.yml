@@ -1,5 +1,6 @@
-name: httpd
-description: Apache HTTP Server
+pkgname: httpd
+name: Apache HTTP Server
+description: Open-source HTTP Web Server
 version: 2.2.29
 homepage: http://httpd.apache.org
 url: http://archive.apache.org/dist/httpd/httpd-2.2.29.tar.gz

@@ -1,4 +1,5 @@
-name: perl
+pkgname: perl
+name: Perl
 description: Perl
 version: 5.14.4
 homepage: http://www.perl.org/
