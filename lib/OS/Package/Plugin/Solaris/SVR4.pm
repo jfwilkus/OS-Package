@@ -11,14 +11,34 @@ use Time::Piece;
 use Types::Standard qw( Str );
 use Template;
 use File::ShareDir qw(dist_file);
+use OS::Package::Config;
 use OS::Package::Log;
 
 extends 'OS::Package';
 
-has [qw( user group arch category vendor )] =>
-    ( is => 'rw', isa => Str, required => 1 );
+has user => (
+    is       => 'rw',
+    isa      => Str,
+    required => 1,
+    default  => sub { return $OSPKG_CONFIG->{package}{user} }
+);
 
-has 'pstamp' => (
+has group => (
+    is       => 'rw',
+    isa      => Str,
+    required => 1,
+    default  => sub { return $OSPKG_CONFIG->{package}{group} }
+);
+
+has category => (
+    is       => 'rw',
+    isa      => Str,
+    required => 1,
+    default  => sub { return $OSPKG_CONFIG->{package}{category} }
+);
+
+
+has pstamp => (
     is      => 'rw',
     isa     => Str,
     default => sub { my $t = localtime; return $t->datetime; }
@@ -43,10 +63,10 @@ sub _generate_pkginfo {
         {   PKG      => $self->name,
             NAME     => $self->application->name,
             DESC     => $self->description,
-            ARCH     => $self->architecture,
+            ARCH     => $self->system->type,
             VERSION  => $self->application->version,
             CATEGORY => $self->category,
-            VENDOR   => $self->vendor,
+            VENDOR   => $self->maintainer->company,
             PSTAMP   => $self->pstamp,
             BASEDIR  => $self->prefix,
         },
