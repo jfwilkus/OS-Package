@@ -37,7 +37,7 @@ sub build {
         return 1;
     }
 
-    if ( ! -d $self->fakeroot ) {
+    if ( !-d $self->fakeroot ) {
         make_path $self->fakeroot;
     }
 
@@ -56,17 +56,18 @@ sub build {
     my ( $success, $error_message, $full_buf, $stdout_buf, $stderr_buf ) =
         run( command => $command );
 
+    foreach ( @{$full_buf} ) {
+        $LOGGER->debug($_);
+    }
+
+    chdir $HOME;
+
     if ( !$success ) {
         $LOGGER->error( sprintf "install script failed: %s\n",
             $error_message );
 
-        foreach ( @{$full_buf} ) {
-            $LOGGER->error($_);
-        }
         return 2;
     }
-
-    chdir $HOME;
 
     return 1;
 }
