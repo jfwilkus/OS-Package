@@ -8,16 +8,8 @@ package OS::Package::Application;
 
 use Moo;
 use Types::Standard qw( Str InstanceOf );
-use Path::Tiny;
 
 has [qw/name version/] => ( is => 'rw', isa => Str, required => 1 );
-
-has fakeroot => (
-    is       => 'rw',
-    isa      => InstanceOf ['Path::Tiny'],
-    required => 1,
-    default  => sub { return Path::Tiny->tempdir }
-);
 
 1;
 

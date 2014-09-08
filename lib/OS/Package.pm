@@ -7,6 +7,7 @@ package OS::Package;
 # VERSION
 
 use Moo;
+use Path::Tiny;
 use OS::Package::System;
 use Types::Standard qw( Str ArrayRef InstanceOf );
 
@@ -42,6 +43,13 @@ has maintainer => (
     is       => 'rw',
     isa      => InstanceOf ['OS::Package::Maintainer'],
     required => 1
+);
+
+has fakeroot => (
+    is       => 'rw',
+    isa      => InstanceOf ['Path::Tiny'],
+    required => 1,
+    default  => sub { return Path::Tiny->tempdir( CLEANUP => 0 ) }
 );
 
 1;
