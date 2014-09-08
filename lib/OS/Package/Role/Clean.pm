@@ -1,7 +1,7 @@
 use v5.14.0;
 use warnings;
 
-package OS::Package::Application::Role::Clean;
+package OS::Package::Role::Clean;
 
 # ABSTRACT: Provides the clean method for Application role.
 # VERSION
@@ -13,11 +13,14 @@ use Role::Tiny;
 sub clean {
     my $self = shift;
 
-    if ( !defined $self->fakeroot ) {
-        return;
+    if ( defined $self->workdir && -d $self->workdir ) {
+        $LOGGER->info( sprintf 'cleaning work directory: %s',
+            $self->workdir );
+
+        remove_tree $self->workdir;
     }
 
-    if ( -d $self->fakeroot ) {
+    if ( defined $self->fakeroot && -d $self->fakeroot ) {
         $LOGGER->info( sprintf 'cleaning fakeroot directory: %s',
             $self->fakeroot );
 
