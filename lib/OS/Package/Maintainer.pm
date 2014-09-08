@@ -9,14 +9,20 @@ package OS::Package::Maintainer;
 use Moo;
 use Types::Standard qw( Str Enum );
 
-has [qw/name/] => ( is => 'rw', isa => Str, required => 1 );
+has author => ( is => 'rw', isa => Str, required => 1 );
 
-has [qw/nickname email phone company/] => ( is => 'rw', isa => Str );
+has company => (
+    is      => 'rw',
+    isa     => Str,
+    default => sub { my $self = shift; return $self->author }
+);
+
+has [qw/nickname email phone/] => ( is => 'rw', isa => Str );
 
 sub by_line {
     my $self = shift;
 
-    my $by_line;
+    my $by_line = $self->author;
 
     if ( defined $self->nickname ) {
         $by_line .= sprintf ' (%s)', $self->nickname;
