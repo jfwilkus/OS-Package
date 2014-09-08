@@ -11,6 +11,7 @@ use Time::Piece;
 use Types::Standard qw( Str );
 use Template;
 use File::ShareDir qw(dist_file);
+use File::Basename qw( basename dirname );
 use OS::Package::Config;
 use OS::Package::Log;
 
@@ -37,7 +38,6 @@ has category => (
     default  => sub { return $OSPKG_CONFIG->{package}{category} }
 );
 
-
 has pstamp => (
     is      => 'rw',
     isa     => Str,
@@ -60,15 +60,15 @@ sub _generate_pkginfo {
 
     $tt->process(
         basename($template),
-        {   PKG      => $self->name,
-            NAME     => $self->application->name,
-            DESC     => $self->description,
-            ARCH     => $self->system->type,
-            VERSION  => $self->application->version,
-            CATEGORY => $self->category,
-            VENDOR   => $self->maintainer->company,
-            PSTAMP   => $self->pstamp,
-            BASEDIR  => $self->prefix,
+        {   pkgname     => $self->name,
+            name        => $self->application->name,
+            description => $self->description,
+            arch        => $self->system->type,
+            version     => $self->application->version,
+            category    => $self->category,
+            vendor      => $self->maintainer->company,
+            pstamp      => $self->pstamp,
+            basedir     => $self->prefix,
         },
         $pkginfo
     ) or $LOGGER->logdie( $tt->error );
