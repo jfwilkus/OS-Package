@@ -3,7 +3,7 @@ use warnings;
 
 package OS::Package::Role::Clean;
 
-# ABSTRACT: Provides the clean method for Application role.
+# ABSTRACT: Provides the clean method.
 # VERSION
 
 use File::Path qw( remove_tree );
