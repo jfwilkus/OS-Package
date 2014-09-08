@@ -105,7 +105,7 @@ sub _generate_prototype {
 
     chdir $pkg_path;
 
-    my $command = [ can_run('pkgproto'), '-i', '.' ];
+    my $command = [ can_run('pkgproto'), '.' ];
 
     my ( $success, $error_message, $full_buf, $stdout_buf, $stderr_buf ) =
         run( command => $command );
@@ -122,7 +122,7 @@ sub _generate_prototype {
 
     my @prototype = ("i pkginfo\n");
 
-    my @lines = split "\n", pop $stdout_buf;
+    my @lines = split "\n",  join(q{}, @{ $stdout_buf });
 
     foreach my $line (@lines) {
         my ( $file_type, $class, $pathname, $mode, $owner, $group ) =
