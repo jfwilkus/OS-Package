@@ -6,42 +6,62 @@ package OS::Package::Plugin::Solaris::SVR4;
 # ABSTRACT: Default Abstract Description, Please Change.
 # VERSION
 
+use Cwd;
 use Moo;
+use Env qw( $HOME );
 use Time::Piece;
 use Types::Standard qw( Str );
 use Template;
+use Path::Tiny;
 use File::ShareDir qw(dist_file);
 use File::Basename qw( basename dirname );
 use OS::Package::Config;
 use OS::Package::Log;
+use IPC::Cmd qw( can_run run );
 
 extends 'OS::Package';
+
+has pkgfile_suffix =>
+    ( is => 'ro', isa => Str, required => 1, default => 'pkg' );
 
 has user => (
     is       => 'rw',
     isa      => Str,
     required => 1,
-    default  => sub { return $OSPKG_CONFIG->{package}{user} }
+    default  => $OSPKG_CONFIG->{package}{user}
 );
 
 has group => (
     is       => 'rw',
     isa      => Str,
     required => 1,
-    default  => sub { return $OSPKG_CONFIG->{package}{group} }
+    default  => $OSPKG_CONFIG->{package}{group}
 );
 
 has category => (
     is       => 'rw',
     isa      => Str,
     required => 1,
-    default  => sub { return $OSPKG_CONFIG->{package}{category} }
+    default  => $OSPKG_CONFIG->{package}{category}
 );
 
 has pstamp => (
     is      => 'rw',
     isa     => Str,
     default => sub { my $t = localtime; return $t->datetime; }
+);
+
+has pkgfile => (
+    is       => 'rw',
+    isa      => Str,
+    required => 1,
+    default  => sub {
+        my $self   = shift;
+        my $system = OS::Package::System->new;
+        return sprintf '%s-%s-%s-%s.pkg', $self->name,
+            $self->application->version,
+            $system->os, $system->type, $self->pkgfile_suffix;
+    }
 );
 
 sub _generate_pkginfo {
@@ -77,11 +97,105 @@ sub _generate_pkginfo {
 }
 
 sub _generate_prototype {
-    return;
+    my $self = shift;
+
+    $LOGGER->info('generating: prototype');
+
+    my $pkg_path = sprintf '%s/%s', $self->fakeroot, $self->prefix;
+
+    chdir $pkg_path;
+
+    my $command = [ can_run('pkgproto'), '-i', '.' ];
+
+    my ( $success, $error_message, $full_buf, $stdout_buf, $stderr_buf ) =
+        run( command => $command );
+
+    foreach ( @{$full_buf} ) {
+        $LOGGER->debug($_);
+    }
+
+    if ( !$success ) {
+        $LOGGER->error( sprintf "pkgproto failed: %s\n", $error_message );
+
+        return 2;
+    }
+
+    my @prototype = ("i pkginfo\n");
+
+    my @lines = split "\n", pop $stdout_buf;
+
+    foreach my $line (@lines) {
+        my ( $file_type, $class, $pathname, $mode, $owner, $group ) =
+            split q{ }, $line;
+
+        next if ( $pathname =~ qr{pkginfo|prototype}xms );
+
+        if ( defined $mode ) {
+            push @prototype,
+                sprintf( "%s %s %s %s %s %s\n",
+                $file_type, $class, $pathname, $mode, $self->user,
+                $self->group );
+        }
+        else {
+            push @prototype,
+                sprintf( "%s %s %s\n", $file_type, $class, $pathname );
+        }
+    }
+
+    path( sprintf( '%s/prototype', $pkg_path ) )->spew( \@prototype );
+
+    chdir $HOME;
+
+    return 1;
 }
 
 sub _generate_package {
-    return;
+    my $self = shift;
+
+    $LOGGER->info( sprintf 'generating package: %s', $self->pkgfile );
+
+    my $pkg_path = sprintf '%s/%s', $self->fakeroot, $self->prefix;
+
+    chdir $pkg_path;
+
+    my $command =
+        [ can_run('pkgmk'), '-o', '-r', cwd, '-d', '/var/spool/pkg' ];
+
+    my ( $success, $error_message, $full_buf, $stdout_buf, $stderr_buf ) =
+        run( command => $command );
+
+    foreach ( @{$full_buf} ) {
+        $LOGGER->debug($_);
+    }
+
+    if ( !$success ) {
+        $LOGGER->error( sprintf "pkgproto failed: %s\n", $error_message );
+
+        return 2;
+    }
+
+    $command = [
+        can_run('pkgtrans'), '-s',
+        '/var/spool/pkg',    $self->pkgfile,
+        $self->name
+    ];
+
+    ( $success, $error_message, $full_buf, $stdout_buf, $stderr_buf ) =
+        run( command => $command );
+
+    foreach ( @{$full_buf} ) {
+        $LOGGER->debug($_);
+    }
+
+    if ( !$success ) {
+        $LOGGER->error( sprintf "pkgtrans failed: %s\n", $error_message );
+
+        return 2;
+    }
+
+    chdir $HOME;
+
+    return 1;
 }
 
 sub create {
@@ -90,6 +204,10 @@ sub create {
     $LOGGER->info('generating: Solaris SVR4 package');
 
     $self->_generate_pkginfo;
+
+    $self->_generate_prototype;
+
+    $self->_generate_package;
 
     return 1;
 }
