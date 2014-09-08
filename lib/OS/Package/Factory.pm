@@ -1,7 +1,7 @@
 use v5.14.0;
 use warnings;
 
-package OS::Package::Application::Factory;
+package OS::Package::Factory;
 
 # ABSTRACT: Initialize an OS::Package object.
 # VERSION
@@ -9,11 +9,13 @@ package OS::Package::Application::Factory;
 use Config;
 use Env qw( $HOME );
 use File::Basename;
+use Module::Load;
 use OS::Package;
 use OS::Package::Application;
 use OS::Package::Artifact;
 use OS::Package::Config qw( $OSPKG_CONFIG );
 use OS::Package::Log qw( $LOGGER );
+use OS::Package::Maintainer;
 use OS::Package::System;
 use YAML::Any qw( LoadFile );
 
@@ -47,23 +49,28 @@ sub vivify {
         my $plugin =
             $OSPKG_CONFIG->{plugin}{ $system->os }{ $system->version };
 
+        load $plugin;
+
         my $app = OS::Package::Application->new(
             name    => $config->{name},
             version => $config->{version}
         );
 
-        my $maintainer = OS::Package::Maintainer->new(
-            name     => $config->{maintainer}{name},
-            nickname => $config->{maintainer}{nickname},
-            email    => $config->{maintainer}{email},
-            phone    => $config->{maintainer}{phone},
-            company  => $config->{maintainer}{company}
-        );
+        my $maintainer =
+            OS::Package::Maintainer->new(
+            author => $config->{maintainer}{author} );
+
+        foreach my $method (qw( nickname email phone company )) {
+            if ( defined $config->{maintainer}{$method} ) {
+                $maintainer->$method( $config->{maintainer}{$method} );
+            }
+        }
 
         $pkg = $plugin->new(
             name        => $config->{name},
             version     => $config->{version},
             prefix      => $config->{prefix},
+            description => $config->{description},
             maintainer  => $maintainer,
             application => $app
         );
@@ -81,11 +88,6 @@ sub vivify {
     my $repository =
         sprintf( '%s/%s', $HOME, $OSPKG_CONFIG->dir->repository );
 
-    $pkg->workdir( sprintf '%s/%s', $HOME, $OSPKG_CONFIG->dir->work );
-    $pkg->fakeroot( sprintf '%s/%s', $HOME, $OSPKG_CONFIG->dir->fakeroot );
-
-    # Set fakeroot to workdir if build procedure is not defined.
-    # Assume it's just an archive that must be extracted.
     if ( defined $config->{build} ) {
         $pkg->install( $config->{build} );
     }
@@ -106,7 +108,6 @@ sub vivify {
         distfile   => basename( $config->{url} ),
         url        => $config->{url},
         repository => $repository,
-        workdir    => $pkg->workdir,
     );
 
     if ( defined $config->{md5} ) {
