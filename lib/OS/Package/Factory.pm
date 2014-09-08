@@ -3,15 +3,18 @@ use warnings;
 
 package OS::Package::Application::Factory;
 
-# ABSTRACT: Initialize a OS::Package::Application object.
+# ABSTRACT: Initialize an OS::Package object.
 # VERSION
 
+use Config;
 use Env qw( $HOME );
 use File::Basename;
+use OS::Package;
 use OS::Package::Application;
 use OS::Package::Artifact;
 use OS::Package::Config qw( $OSPKG_CONFIG );
 use OS::Package::Log qw( $LOGGER );
+use OS::Package::System;
 use YAML::Any qw( LoadFile );
 
 use base qw(Exporter);
@@ -35,41 +38,75 @@ sub vivify {
 
     my $config = LoadFile($cfg_file);
 
-    my $app = OS::Package::Application->new(
-        name    => $name,
-        version => $config->{version},
-        prefix  => $config->{prefix}
-    );
+    my $system = OS::Package::System->new;
+
+    my $pkg;
+
+    if ( defined $OSPKG_CONFIG->{plugin}{ $system->os }{ $system->version } )
+    {
+        my $plugin =
+            $OSPKG_CONFIG->{plugin}{ $system->os }{ $system->version };
+
+        my $app = OS::Package::Application->new(
+            name    => $config->{name},
+            version => $config->{version}
+        );
+
+        my $maintainer = OS::Package::Maintainer->new(
+            name     => $config->{maintainer}{name},
+            nickname => $config->{maintainer}{nickname},
+            email    => $config->{maintainer}{email},
+            phone    => $config->{maintainer}{phone},
+            company  => $config->{maintainer}{company}
+        );
+
+        $pkg = $plugin->new(
+            name        => $config->{name},
+            version     => $config->{version},
+            prefix      => $config->{prefix},
+            maintainer  => $maintainer,
+            application => $app
+        );
+
+    }
+    else {
+        $LOGGER->logcroak(
+            sprintf 'cannot find plugin for %s %s',
+            ucfirst( $system->os ),
+            $system->version
+        );
+        return;
+    }
 
     my $repository =
         sprintf( '%s/%s', $HOME, $OSPKG_CONFIG->dir->repository );
 
-    $app->workdir( sprintf '%s/%s', $HOME, $OSPKG_CONFIG->dir->work );
-    $app->fakeroot( sprintf '%s/%s', $HOME, $OSPKG_CONFIG->dir->fakeroot );
+    $pkg->workdir( sprintf '%s/%s', $HOME, $OSPKG_CONFIG->dir->work );
+    $pkg->fakeroot( sprintf '%s/%s', $HOME, $OSPKG_CONFIG->dir->fakeroot );
 
     # Set fakeroot to workdir if build procedure is not defined.
     # Assume it's just an archive that must be extracted.
     if ( defined $config->{build} ) {
-        $app->install( $config->{build} );
+        $pkg->install( $config->{build} );
     }
 
     if ( defined $config->{prune}{directories} ) {
-        $app->prune_dirs( $config->{prune}{directories} );
+        $pkg->prune_dirs( $config->{prune}{directories} );
     }
 
     if ( defined $config->{prune}{files} ) {
-        $app->prune_files( $config->{prune}{files} );
+        $pkg->prune_files( $config->{prune}{files} );
     }
 
     if ( !defined $config->{url} ) {
-        return $app;
+        return $pkg;
     }
 
     my $artifact = OS::Package::Artifact->new(
         distfile   => basename( $config->{url} ),
         url        => $config->{url},
         repository => $repository,
-        workdir    => $app->workdir,
+        workdir    => $pkg->workdir,
     );
 
     if ( defined $config->{md5} ) {
@@ -83,9 +120,9 @@ sub vivify {
     $artifact->savefile(
         sprintf( '%s/%s', $repository, basename( $config->{url} ) ) );
 
-    $app->artifact($artifact);
+    $pkg->artifact($artifact);
 
-    return $app;
+    return $pkg;
 }
 
 1;

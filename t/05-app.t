@@ -1,13 +1,13 @@
 use Test::More;
 
-use_ok('OS::Package');
+use_ok('OS::Package::Application');
 
-my $pkg = OS::Package->new(
-    name        => 'test package',
-    description => 'test package role'
+my $app = OS::Package::Application->new(
+    name    => 'test package',
+    version => '1.0.0'
 );
 
-is( $pkg->name,        'test package' );
-is( $pkg->description, 'test package role' );
+is( $app->name,    'test package' );
+is( $app->version, '1.0.0' );
 
 done_testing;

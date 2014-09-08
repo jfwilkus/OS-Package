@@ -7,6 +7,6 @@ package:
   user: root
   group: root
   category: application
-plugins:
+plugin:
   solaris:
-    "2.10": "OS::Package::Plugin::Solaris::SVR4"
+    "5.10": "OS::Package::Plugin::Solaris::SVR4"

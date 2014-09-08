@@ -7,23 +7,14 @@ package OS::Package::Application;
 # VERSION
 
 use Moo;
-use Types::Standard qw( Str InstanceOf ArrayRef Object );
-use OS::Package::Config;
+use Types::Standard qw( Str );
 
 with qw(
     OS::Package::Application::Role::Build
     OS::Package::Application::Role::Prune
-    OS::Package::Application::Role::Clean
 );
 
-has [qw/name version prefix/]     => ( is => 'rw', isa => Str, required => 1 );
-has [qw/config install workdir fakeroot/] => ( is => 'rw', isa => Str );
-
-has artifact => ( is => 'rw', isa => InstanceOf ['OS::Package::Artifact'] );
-
-has package => ( is => 'rw', isa => Object );
-
-has [qw/prune_dirs prune_files/]  => ( is => 'rw', isa => ArrayRef );
+has [qw/name version fakeroot/] => ( is => 'rw', isa => Str, required => 1 );
 
 1;
 
@@ -31,3 +22,10 @@ has [qw/prune_dirs prune_files/]  => ( is => 'rw', isa => ArrayRef );
 
 The name of the application.
 
+=method version
+
+The version of the application.
+
+=method fakeroot
+
+The location on the local filesytem where build is staged prior to packaging.

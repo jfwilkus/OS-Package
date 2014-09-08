@@ -15,7 +15,7 @@ use OS::Package::Log;
 
 extends 'OS::Package';
 
-has [qw( user group arch basedir category version vendor )] =>
+has [qw( user group arch category vendor )] =>
     ( is => 'rw', isa => Str, required => 1 );
 
 has 'pstamp' => (
@@ -40,15 +40,15 @@ sub _generate_pkginfo {
 
     $tt->process(
         basename($template),
-        {   PKG      => $self->pkgname,
-            NAME     => $self->name,
+        {   PKG      => $self->name,
+            NAME     => $self->application->name,
             DESC     => $self->description,
             ARCH     => $self->architecture,
-            VERSION  => $self->version,
+            VERSION  => $self->application->version,
             CATEGORY => $self->category,
             VENDOR   => $self->vendor,
             PSTAMP   => $self->pstamp,
-            BASEDIR  => $self->basedir,
+            BASEDIR  => $self->prefix,
         },
         $pkginfo
     ) or $LOGGER->logdie( $tt->error );

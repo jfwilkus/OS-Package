@@ -13,7 +13,6 @@ use OS::Package::Config;
 with qw(
     OS::Package::Artifact::Role::Download
     OS::Package::Artifact::Role::Extract
-    OS::Package::Artifact::Role::Clean
     OS::Package::Artifact::Role::Validate
 );
 
