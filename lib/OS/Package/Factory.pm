@@ -100,26 +100,55 @@ sub vivify {
         $pkg->prune_files( $config->{prune}{files} );
     }
 
-    if ( !defined $config->{url} ) {
+    my $artifact;
+
+    if ( defined $config->{url} ) {
+        $artifact = OS::Package::Artifact->new(
+            distfile   => basename( $config->{url} ),
+            url        => $config->{url},
+            repository => $repository,
+        );
+
+        if ( defined $config->{md5} ) {
+            $artifact->md5( $config->{md5} );
+        }
+
+        if ( defined $config->{sha1} ) {
+            $artifact->sha1( $config->{sha1} );
+        }
+
+        $artifact->savefile(
+            sprintf( '%s/%s', $repository, basename( $config->{url} ) ) );
+
+    }
+    elsif ( defined $config->{os}{ $pkg->system->os }{ $pkg->system->type } )
+    {
+
+        my $artifact_cfg =
+            $config->{os}{ $pkg->system->os }{ $pkg->system->type };
+
+        $artifact = OS::Package::Artifact->new(
+            distfile   => basename( $artifact_cfg->{url} ),
+            url        => $artifact_cfg->{url},
+            repository => $repository,
+        );
+
+        if ( defined $artifact_cfg->{md5} ) {
+            $artifact->md5( $artifact_cfg->{md5} );
+        }
+
+        if ( defined $artifact_cfg->{sha1} ) {
+            $artifact->sha1( $artifact_cfg->{sha1} );
+        }
+
+        $artifact->savefile(
+            sprintf( '%s/%s', $repository, basename( $artifact_cfg->{url} ) )
+        );
+
+    }
+    else {
         return $pkg;
     }
-
-    my $artifact = OS::Package::Artifact->new(
-        distfile   => basename( $config->{url} ),
-        url        => $config->{url},
-        repository => $repository,
-    );
-
-    if ( defined $config->{md5} ) {
-        $artifact->md5( $config->{md5} );
-    }
-
-    if ( defined $config->{sha1} ) {
-        $artifact->sha1( $config->{sha1} );
-    }
-
-    $artifact->savefile(
-        sprintf( '%s/%s', $repository, basename( $config->{url} ) ) );
 
     $pkg->artifact($artifact);
 
