@@ -49,7 +49,7 @@ has fakeroot => (
     is       => 'rw',
     isa      => InstanceOf ['Path::Tiny'],
     required => 1,
-    default  => sub { return Path::Tiny->tempdir( CLEANUP => 0 ) }
+    default  => sub { return Path::Tiny->tempdir }
 );
 
 1;
