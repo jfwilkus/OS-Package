@@ -100,14 +100,13 @@ sub vivify {
         $pkg->prune_files( $config->{prune}{files} );
     }
 
-    my $artifact;
+    my $artifact = OS::Package::Artifact->new;
 
     if ( defined $config->{url} ) {
-        $artifact = OS::Package::Artifact->new(
-            distfile   => basename( $config->{url} ),
-            url        => $config->{url},
-            repository => $repository,
-        );
+
+        $artifact->distfile(basename( $config->{url} ));
+        $artifact->url($config->{url});
+        $artifact->repository($repository);
 
         if ( defined $config->{md5} ) {
             $artifact->md5( $config->{md5} );
@@ -145,9 +144,6 @@ sub vivify {
             sprintf( '%s/%s', $repository, basename( $artifact_cfg->{url} ) )
         );
 
-    }
-    else {
-        return $pkg;
     }
 
     $pkg->artifact($artifact);
