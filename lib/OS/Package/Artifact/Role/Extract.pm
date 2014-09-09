@@ -4,6 +4,7 @@ use warnings;
 package OS::Package::Artifact::Role::Extract;
 
 use Archive::Extract;
+use File::Copy;
 use File::Path qw( make_path remove_tree );
 use OS::Package::Config;
 use OS::Package::Log;
@@ -22,16 +23,28 @@ sub extract {
         make_path $self->workdir;
     }
 
-    my $archive = Archive::Extract->new( archive => $self->savefile );
+    my $archive;
 
-    $LOGGER->info( sprintf 'extracting archive: %s', $self->distfile );
+    if ( $self->distfile =~ /\.(tar|tgz|gz|Z|zip|bz2|tbz|lzma|xz|tx)$/ ) {
 
-    $archive->extract( to => $self->workdir );
+        $archive = Archive::Extract->new( archive => $self->savefile );
+        $LOGGER->info( sprintf 'extracting archive: %s', $self->distfile );
 
-    $self->archive($archive);
+        $archive->extract( to => $self->workdir );
 
-    $LOGGER->info( sprintf 'extracted archive: %s',
-        $self->archive->extract_path );
+        $self->archive($archive);
+
+        $LOGGER->info( sprintf 'extracted archive: %s',
+            $self->archive->extract_path );
+    }
+    else {
+
+        $LOGGER->info( sprintf 'staging distfile to workdir: %s',
+            $self->distfile );
+
+        copy( $self->savefile,
+            sprintf( '%s/%s', $self->workdir, $self->distfile ) );
+    }
 
     return 1;
 
