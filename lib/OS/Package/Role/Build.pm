@@ -27,7 +27,8 @@ sub build {
     my $vars = {
         FAKEROOT => $self->fakeroot,
         WORKDIR  => $self->artifact->workdir,
-        PREFIX   => $self->prefix
+        PREFIX   => $self->prefix,
+        DISTFILE => $self->artifact->distfile
     };
 
     if ( defined $self->install ) {
@@ -49,7 +50,7 @@ sub build {
 
     $LOGGER->info( sprintf 'building: %s', $self->name );
 
-    if ( defined $self->artifact ) {
+    if ( defined $self->artifact->archive ) {
         chdir $self->artifact->archive->extract_path;
     }
 
