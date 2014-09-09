@@ -18,7 +18,8 @@ sub download {
     my $self = shift;
 
     if ( !$self->url ) {
-        $LOGGER->logcroak('did not define url');
+        $LOGGER->debug('did not define url');
+        return 1;
     }
 
     if ( -f $self->savefile ) {

@@ -25,6 +25,10 @@ sub extract {
 
     my $archive;
 
+    if ( ! defined $self->distfile ) {
+        return 1;
+    }
+
     if ( $self->distfile =~ /\.(tar|tgz|gz|Z|zip|bz2|tbz|lzma|xz|tx)$/ ) {
 
         $archive = Archive::Extract->new( archive => $self->savefile );
