@@ -64,7 +64,7 @@ sub build {
     chdir $HOME;
 
     if ( !$success ) {
-        $LOGGER->error( sprintf "install script failed: %s\n",
+        $LOGGER->logcroak( sprintf "install script failed: %s\n",
             $error_message );
 
         return 2;
