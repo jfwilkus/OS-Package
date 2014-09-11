@@ -38,8 +38,6 @@ sub by_line {
 
 1;
 
-=method os
+=method by_line
 
-=method type
-
-=method bits
+Returns string "Author (nickname) <email>".
