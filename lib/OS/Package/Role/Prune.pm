@@ -57,3 +57,7 @@ sub prune {
 }
 
 1;
+
+=method prune
+
+Attempts to clean workdir and fakeroot directories.

@@ -232,3 +232,11 @@ sub create {
 }
 
 1;
+
+=method create
+
+Create Solaris SVR4 package.
+
+=method pkgfile_suffix
+
+Returns file extension for SVR4 package.
