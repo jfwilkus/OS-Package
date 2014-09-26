@@ -9,6 +9,7 @@ package OS::Package::CLI;
 use English qw(-no_match_vars);
 use Env qw( $HOME );
 use File::Basename;
+use Getopt::Long;
 use OS::Package::Application;
 use OS::Package::Config;
 use OS::Package::Factory;
@@ -18,7 +19,9 @@ use Try::Tiny;
 
 sub run {
 
-    my ( $COMMAND, $APP );
+    my ( $COMMAND, $APP, %OPT );
+
+    GetOptions( \%OPT, 'build_id=s' );
 
     $COMMAND = shift @ARGV;
     $APP     = shift @ARGV;
@@ -46,8 +49,13 @@ sub run {
         $LOGGER->warn('missing app');
         exit;
     }
+    my $app = { name => $APP };
 
-    my $pkg = vivify($APP);
+    if ( defined $OPT{build_id} ) {
+        $app->{build_id} = $OPT{build_id};
+    }
+
+    my $pkg = vivify($app);
 
     $LOGGER->info( sprintf 'processing: %s %s', $pkg->name, $pkg->version );
 

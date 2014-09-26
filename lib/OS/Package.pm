@@ -20,7 +20,7 @@ with qw(
 has [qw/name description prefix version/] =>
     ( is => 'rw', isa => Str, required => 1 );
 
-has [qw/config install/] => ( is => 'rw', isa => Str );
+has [qw/config install build_id/] => ( is => 'rw', isa => Str );
 
 has [qw/prune_dirs prune_files/] => ( is => 'rw', isa => ArrayRef );
 

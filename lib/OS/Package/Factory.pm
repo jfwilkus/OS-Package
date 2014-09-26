@@ -27,8 +27,9 @@ local $YAML::UseCode  = 0 if !defined $YAML::UseCode;
 local $YAML::LoadCode = 0 if !defined $YAML::LoadCode;
 
 sub vivify {
-
-    my $name = shift;
+    my ($arg_ref) = @_;
+    my $name      = $arg_ref->{name};
+    my $build_id  = $arg_ref->{build_id};
 
     my $cfg_file = sprintf '%s/%s/%s.yml', $HOME, $OSPKG_CONFIG->dir->configs,
         lc($name);
@@ -66,14 +67,20 @@ sub vivify {
             }
         }
 
-        $pkg = $plugin->new(
+        my $pkg_config = {
             name        => $config->{pkgname},
             version     => $config->{version},
             prefix      => $config->{prefix},
             description => $config->{description},
             maintainer  => $maintainer,
-            application => $app
-        );
+            application => $app,
+        };
+
+        if ( defined $build_id ) {
+            $pkg_config->{build_id} = $build_id;
+        }
+
+        $pkg = $plugin->new($pkg_config);
 
     }
     else {
@@ -104,8 +111,8 @@ sub vivify {
 
     if ( defined $config->{url} ) {
 
-        $artifact->distfile(basename( $config->{url} ));
-        $artifact->url($config->{url});
+        $artifact->distfile( basename( $config->{url} ) );
+        $artifact->url( $config->{url} );
         $artifact->repository($repository);
 
         if ( defined $config->{md5} ) {

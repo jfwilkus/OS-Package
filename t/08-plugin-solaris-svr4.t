@@ -1,4 +1,5 @@
 
+use OS::Package::System;
 use DateTime::Format::DateManip;
 use Test::More;
 
@@ -32,12 +33,13 @@ my $cfg = {
     prefix      => '/opt/sf',
     category    => 'application',
     description => 'test application',
-    version     => '1.0',
+    version     => '1.0.0',
     maintainer  => $maintainer,
     application => $app
 };
 
-my $pkg = OS::Package::Plugin::Solaris::SVR4->new($cfg);
+my $system = OS::Package::System->new;
+my $pkg    = OS::Package::Plugin::Solaris::SVR4->new($cfg);
 
 foreach my $key ( keys %{$cfg} ) {
     is( $pkg->$key, $cfg->{$key} );
@@ -49,5 +51,21 @@ ok( DateTime::Format::DateManip->parse_datetime( $pkg->pstamp ),
     'pstamp is a valid date' );
 
 can_ok( $pkg, 'create' );
+
+my $package_file = sprintf( 'testpackage-1.0.0-%s-%s.pkg',
+    $system->os, $system->type );
+
+is( $pkg->pkgfile, $package_file,
+    'package filename correctly generated without a build_id' );
+
+$cfg->{build_id} = qw{12345};
+
+my $pkg2 = OS::Package::Plugin::Solaris::SVR4->new($cfg);
+
+my $package_file = sprintf( 'testpackage-1.0.0-b12345-%s-%s.pkg',
+    $system->os, $system->type );
+
+is( $pkg2->pkgfile, $package_file,
+    'package filename correctly generated when a build_id is defined' );
 
 done_testing;

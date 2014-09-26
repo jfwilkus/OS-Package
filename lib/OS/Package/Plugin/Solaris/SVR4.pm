@@ -59,8 +59,14 @@ has pkgfile => (
     default  => sub {
         my $self   = shift;
         my $system = OS::Package::System->new;
+
+        my $version =
+            $self->build_id
+            ? sprintf '%s-b%s', $self->application->version, $self->build_id
+            : $self->application->version;
+
         return sprintf '%s-%s-%s-%s.pkg', $self->name,
-            $self->application->version,
+            $version,
             $system->os, $system->type, $self->pkgfile_suffix;
     }
 );
@@ -79,15 +85,20 @@ sub _generate_pkginfo {
 
     my $pkginfo = sprintf '%s/%s/pkginfo', $self->fakeroot, $self->prefix;
 
+    my $version =
+        $self->build_id
+        ? sprintf '%s-b%s', $self->application->version, $self->build_id
+        : $self->application->version;
+
     $tt->process(
         basename($template),
         {   pkgname     => $self->name,
             name        => $self->application->name,
             description => $self->description,
             arch        => $self->system->type,
-            version     => $self->application->version,
+            version     => $version,
             category    => $self->category,
-            vendor      => $self->maintainer->company,
+            vendor      => $self->maintainer->by_line,
             pstamp      => $self->pstamp,
             basedir     => $self->prefix,
         },

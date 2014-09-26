@@ -35,7 +35,8 @@ my $pkg = OS::Package->new(
     prefix      => $prefix,
     maintainer  => $maintainer,
     description => $description,
-    application => $app
+    application => $app,
+    build_id    => qw{1}
 );
 
 isa_ok( $pkg, 'OS::Package' );
@@ -44,5 +45,6 @@ is( $pkg->name, $name );
 
 is( $pkg->maintainer->author, $author, 'maintainer is properly defined' );
 is( $pkg->system->os, $Config{osname}, 'os is properly defined' );
+is( $pkg->build_id, qw{1}, 'build_id is properly defined' );
 
 done_testing;
