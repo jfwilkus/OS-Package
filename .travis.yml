@@ -21,4 +21,4 @@ install:
   - "cpanm -n Template"
   - "cpanm -n Types::Standard"
   - "cpanm -n DateTime::Format::DateManip"
-script: "dzil test --release --author"
+script: "dzil smoke --release --author"
