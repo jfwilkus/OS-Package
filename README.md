@@ -4,7 +4,21 @@ OS-Package will build software from source and package the software using the na
 
 It is currently in active development and not ready for production use.  Currently only a Solaris 10 SVR4 plugin is working.
 
+# Installation
+
+If you don't already have [Perl](http://perl.org) installed, use [Perlbrew](http://perlbrew.pl) to install it.
+
+```
+cpanm OS::Package
+```
+
 # Usage
+
+Use the `ospkg init` to set default paths.
+
+```
+$ ospkg init -c ~/projects/ospkg_configs -p /repository/packages/
+```
 
 ```
 $ ospkg build httpd
