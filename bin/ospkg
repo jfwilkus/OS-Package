@@ -21,6 +21,10 @@ OS::Package::CLI->run() unless caller();
 
 =over
 
+=item B<init>
+
+Initialize ospkg.
+
 =item B<download>
 
 Download the distribution.
