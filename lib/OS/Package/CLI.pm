@@ -57,12 +57,14 @@ sub run {
 
     if ( $COMMAND eq 'init' ) {
         init_ospkg;
+        $LOGGER->info( sprintf 'puts configs in %s',
+            $OSPKG_CONFIG->dir->configs );
         exit;
     }
 
     if ( !path( $OSPKG_CONFIG->dir->base )->exists ) {
-        $LOGGER->fatal('has ospkg been initialized?');
-        exit 2;
+        $LOGGER->info('initializing');
+        init_ospkg;
     }
 
     if ( !defined $APP ) {
