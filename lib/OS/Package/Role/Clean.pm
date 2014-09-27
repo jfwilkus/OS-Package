@@ -6,7 +6,7 @@ package OS::Package::Role::Clean;
 # ABSTRACT: Provides the clean method.
 # VERSION
 
-use File::Path qw( remove_tree );
+use Path::Tiny;
 use OS::Package::Log;
 use Role::Tiny;
 
@@ -17,14 +17,14 @@ sub clean {
         $LOGGER->info( sprintf 'cleaning work directory: %s',
             $self->workdir );
 
-        remove_tree $self->workdir;
+        path($self->workdir)->remove_tree;
     }
 
     if ( defined $self->fakeroot && -d $self->fakeroot ) {
         $LOGGER->info( sprintf 'cleaning fakeroot directory: %s',
             $self->fakeroot );
 
-        remove_tree $self->fakeroot;
+        path($self->fakeroot)->remove_tree;
     }
 
     return 1;

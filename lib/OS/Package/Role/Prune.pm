@@ -7,7 +7,7 @@ package OS::Package::Role::Prune;
 # VERSION
 
 use OS::Package::Log;
-use File::Path qw( make_path remove_tree );
+use Path::Tiny;
 use Try::Tiny;
 use Role::Tiny;
 
@@ -35,7 +35,7 @@ sub prune {
                 sprintf( '%s/%s/%s', $self->fakeroot, $self->prefix, $file );
             $LOGGER->debug( sprintf 'removing file: %s', $pfile );
 
-            unlink $pfile;
+            unlink path($pfile)->stringify;
         }
     }
 
@@ -49,7 +49,7 @@ sub prune {
                 sprintf( '%s/%s/%s', $self->fakeroot, $self->prefix, $dir );
             $LOGGER->debug( sprintf 'removing directory: %s', $pdir );
 
-            remove_tree $pdir;
+            path($pdir)->remove_tree( { safe => 0 } );
         }
     }
 

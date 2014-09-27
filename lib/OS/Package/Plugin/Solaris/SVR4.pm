@@ -15,8 +15,7 @@ use Template;
 use Path::Tiny;
 use File::ShareDir qw(dist_file);
 use File::Basename qw( basename dirname );
-use File::Path qw( remove_tree );
-use OS::Package::Config;
+use OS::Package::Config qw($OSPKG_CONFIG);
 use OS::Package::Log;
 use IPC::Cmd qw( can_run run );
 
@@ -83,7 +82,7 @@ sub _generate_pkginfo {
 
     my $tt = Template->new($ttcfg);
 
-    my $pkginfo = sprintf '%s/%s/pkginfo', $self->fakeroot, $self->prefix;
+    my $pkginfo = sprintf '%s/%s/pkginfo', path($self->fakeroot), $self->prefix;
 
     my $version =
         $self->build_id
@@ -113,9 +112,9 @@ sub _generate_prototype {
 
     $LOGGER->info('generating: prototype');
 
-    my $pkg_path = sprintf '%s/%s', $self->fakeroot, $self->prefix;
+    my $pkg_path = sprintf '%s/%s', path($self->fakeroot), $self->prefix;
 
-    chdir $pkg_path;
+    chdir path($pkg_path);
 
     my $command = [ can_run('pkgproto'), '.' ];
 
@@ -166,22 +165,28 @@ sub _generate_package {
 
     $LOGGER->info( sprintf 'generating package: %s', $self->name );
 
-    my $pkg_path = sprintf '%s/%s', $self->fakeroot, $self->prefix;
+    my $pkg_path = sprintf '%s/%s', path($self->fakeroot), $self->prefix;
 
-    chdir $pkg_path;
+    chdir path($pkg_path);
 
-    if ( -d sprintf( '/var/spool/pkg/%s', $self->name ) ) {
+    if ( -d sprintf( '%s/%s', path($OSPKG_CONFIG->dir->packages), $self->name ) ) {
         $LOGGER->debug('removing existing package spool directory');
-        remove_tree sprintf( '/var/spool/pkg/%s', $self->name );
+        my $spool_dir =
+            sprintf( '%s/%s', path($OSPKG_CONFIG->dir->packages), $self->name );
+        path($spool_dir)->remove_tree( { safe => 0 } );
     }
 
-    if ( -f sprintf( '/var/spool/pkg/%s', $self->pkgfile ) ) {
+    if ( -f sprintf( '%s/%s', path($OSPKG_CONFIG->dir->packages), $self->pkgfile ) )
+    {
         $LOGGER->debug('removing existing package file from spool directory');
-        unlink sprintf( '/var/spool/pkg/%s', $self->pkgfile );
+        my $pkg_file =
+            sprintf( '%s/%s', path($OSPKG_CONFIG->dir->packages), $self->pkgfile );
+        path($pkg_file)->remove;
     }
 
-    my $command =
-        [ can_run('pkgmk'), '-o', '-r', cwd, '-d', '/var/spool/pkg' ];
+    my $command = [
+        can_run('pkgmk'), '-o', '-r', cwd, '-d', path($OSPKG_CONFIG->dir->packages)
+    ];
 
     my ( $success, $error_message, $full_buf, $stdout_buf, $stderr_buf ) =
         run( command => $command );
@@ -197,8 +202,8 @@ sub _generate_package {
     }
 
     $command = [
-        can_run('pkgtrans'), '-s',
-        '/var/spool/pkg',    $self->pkgfile,
+        can_run('pkgtrans'),          '-s',
+        path($OSPKG_CONFIG->dir->packages), $self->pkgfile,
         $self->name
     ];
 
@@ -215,15 +220,20 @@ sub _generate_package {
         return 2;
     }
 
-    if ( -d sprintf( '/var/spool/pkg/%s', $self->name ) ) {
+    if ( -d sprintf( '%s/%s', path($OSPKG_CONFIG->dir->packages), $self->name ) ) {
         $LOGGER->debug('removing existing package spool directory');
-        remove_tree sprintf( '/var/spool/pkg/%s', $self->name );
+        my $spool_dir =
+            sprintf( '%s/%s', path($OSPKG_CONFIG->dir->packages), $self->name );
+        path($spool_dir)->remove_tree( { safe => 0 } );
     }
 
     chdir $HOME;
 
-    $LOGGER->info( sprintf 'created package: /var/spool/pkg/%s',
-        $self->pkgfile );
+    $LOGGER->info(
+        sprintf 'created package: %s/%s',
+        path($OSPKG_CONFIG->dir->packages),
+        $self->pkgfile
+    );
 
     return 1;
 }

@@ -8,7 +8,6 @@ package OS::Package::Role::Build;
 
 use OS::Package::Log;
 use File::Basename qw( basename dirname );
-use File::Path qw( make_path );
 use IPC::Cmd qw( can_run run );
 use Env qw( $CC $HOME );
 use File::Temp;
@@ -38,8 +37,8 @@ sub build {
         return 1;
     }
 
-    if ( !-d $self->fakeroot ) {
-        make_path $self->fakeroot;
+    if ( ! path($self->fakeroot)->exists ) {
+        path($self->fakeroot)->mkpath;
     }
 
     my $tt = Template->new( { INCLUDE_PATH => dirname($template) } );
@@ -51,7 +50,7 @@ sub build {
     $LOGGER->info( sprintf 'building: %s', $self->name );
 
     if ( defined $self->artifact->archive ) {
-        chdir $self->artifact->archive->extract_path;
+        chdir path($self->artifact->archive->extract_path)->realpath;
     }
 
     my ( $success, $error_message, $full_buf, $stdout_buf, $stderr_buf ) =

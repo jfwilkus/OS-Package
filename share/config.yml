@@ -1,8 +1,9 @@
+user_config: ~/.ospkg/config.yml
 dir:
-  repository: ospkg/distfiles
-  configs: ospkg/configs
-  work: ospkg/work
-  fakeroot: ospkg/fakeroot
+  base: "~/.ospkg"
+  repository: "~/.ospkg/distfiles"
+  configs: "~/.ospkg/configs"
+  packages: "~/.ospkg/packages"
 package:
   user: root
   group: root

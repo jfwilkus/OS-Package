@@ -16,9 +16,11 @@ with qw(
     OS::Package::Artifact::Role::Validate
 );
 
-my @string_methods = qw( distfile savefile repository url md5 sha1 );
+my @string_methods = qw( distfile savefile url md5 sha1 );
 
 has [@string_methods] => ( is => 'rw', isa => Str );
+
+has repository => ( is => 'rw', isa => InstanceOf ['Path::Tiny'] );
 
 has archive => ( is => 'rw', isa => InstanceOf ['Archive::Extract'] );
 

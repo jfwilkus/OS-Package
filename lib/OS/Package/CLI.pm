@@ -11,9 +11,11 @@ use Env qw( $HOME );
 use File::Basename;
 use Getopt::Long;
 use OS::Package::Application;
-use OS::Package::Config;
+use OS::Package::Config qw($OSPKG_CONFIG);
 use OS::Package::Factory;
+use OS::Package::Init;
 use OS::Package::Log;
+use Path::Tiny;
 use Pod::Usage;
 use Try::Tiny;
 
@@ -21,7 +23,7 @@ sub run {
 
     my ( $COMMAND, $APP, %OPT );
 
-    GetOptions( \%OPT, 'build_id=s' );
+    GetOptions( \%OPT, 'build_id|b=s', 'config_dir|c=s', 'pkg_dir|p=s' );
 
     $COMMAND = shift @ARGV;
     $APP     = shift @ARGV;
@@ -45,13 +47,34 @@ sub run {
         exit;
     }
 
+    if ( defined $OPT{config_dir} ) {
+        $OSPKG_CONFIG->dir->configs( $OPT{config_dir} );
+    }
+
+    if ( defined $OPT{pkg_dir} ) {
+        $OSPKG_CONFIG->dir->packages( $OPT{pkg_dir} );
+    }
+
+    if ( $COMMAND eq 'init' ) {
+        init_ospkg;
+        $LOGGER->info( sprintf 'puts configs in %s',
+            $OSPKG_CONFIG->dir->configs );
+        exit;
+    }
+
+    if ( !path( $OSPKG_CONFIG->dir->base )->exists ) {
+        $LOGGER->info('initializing');
+        init_ospkg;
+    }
+
     if ( !defined $APP ) {
         $LOGGER->warn('missing app');
         exit;
     }
+
     my $app = { name => $APP };
 
-    $LOGGER = Log::Log4perl->get_logger($app->{name});
+    $LOGGER = Log::Log4perl->get_logger( $app->{name} );
 
     if ( defined $OPT{build_id} ) {
         $app->{build_id} = $OPT{build_id};

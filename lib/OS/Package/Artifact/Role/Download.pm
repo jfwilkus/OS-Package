@@ -3,7 +3,6 @@ use warnings;
 
 package OS::Package::Artifact::Role::Download;
 
-use File::Path qw( make_path );
 use FileHandle;
 use HTTP::Tiny;
 use OS::Package::Log;
@@ -22,7 +21,7 @@ sub download {
         return 1;
     }
 
-    if ( -f $self->savefile ) {
+    if ( path( $self->savefile )->exists ) {
 
         $LOGGER->info( sprintf 'distfile exists: %s', $self->savefile );
 
@@ -32,21 +31,16 @@ sub download {
         else {
             $LOGGER->warn( sprintf 'removing bad distfile: %s',
                 $self->savefile );
-            unlink $self->savefile;
+            path( $self->savefile )->remove;
         }
     }
 
-    if ( !-d $self->repository ) {
-        make_path $self->repository;
-        $LOGGER->info( sprintf 'creating repository directory: %s',
-            $self->repository );
-    }
-
     $LOGGER->info( sprintf 'downloading: %s', $self->distfile );
+    $LOGGER->debug( sprintf 'saving to: %s', $self->savefile );
 
     my $response = HTTP::Tiny->new->get( $self->url );
 
-    my $save_file = path( $self->savefile );
+    my $save_file = path( $self->savefile )->realpath;
 
     $save_file->spew( $response->{content} );
 
