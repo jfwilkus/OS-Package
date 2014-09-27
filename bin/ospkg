@@ -15,9 +15,9 @@ OS::Package::CLI->run() unless caller();
 
 =head1 SYNOPSIS
 
-	$ ospkg [OPTION] [APPLICATION]
+	$ ospkg [COMMAND] [OPTIONS] [APPLICATION]
 
-=head1 OPTIONS
+=head1 COMMAND
 
 =over
 
@@ -45,5 +45,18 @@ Prunes files and directories from build.
 
 Prints version and exits.
 
+=back
+
+=head1 OPTIONS
+
+=over
+
+=item B<-c|--config_dir> I<directory>
+
+Specify a directory where the configuration files are stored.  Default is ~/.ospkg/configs.
+
+=item B<-p|--pkg_dir> I<directory>
+
+Specify a directory where the packages files are stored.  Default is ~/.ospkg/packages.
 
 =back
