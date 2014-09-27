@@ -4,5 +4,7 @@ perl:
   - "5.18"
   - "5.16"
   - "5.14"
-install:
-    - cpanm -v --installdeps --notest --mirror http://cpan.mirrors.travis-ci.org .
+before_install:
+  - "cpanm -n Dist::Zilla"
+install: "dzil listdeps | xargs cpanm"
+script: "dzil test --release --author"
