@@ -15,7 +15,6 @@ use Template;
 use Path::Tiny;
 use File::ShareDir qw(dist_file);
 use File::Basename qw( basename dirname );
-use File::Path qw( remove_tree );
 use OS::Package::Config qw($OSPKG_CONFIG);
 use OS::Package::Log;
 use IPC::Cmd qw( can_run run );
@@ -174,7 +173,7 @@ sub _generate_package {
         $LOGGER->debug('removing existing package spool directory');
         my $spool_dir =
             sprintf( '%s/%s', path($OSPKG_CONFIG->dir->packages), $self->name );
-        path($spool_dir)->remove_tree;
+        path($spool_dir)->remove_tree( { safe => 0 } );
     }
 
     if ( -f sprintf( '%s/%s', path($OSPKG_CONFIG->dir->packages), $self->pkgfile ) )
@@ -225,7 +224,7 @@ sub _generate_package {
         $LOGGER->debug('removing existing package spool directory');
         my $spool_dir =
             sprintf( '%s/%s', path($OSPKG_CONFIG->dir->packages), $self->name );
-        path($spool_dir)->remove_tree;
+        path($spool_dir)->remove_tree( { safe => 0 } );
     }
 
     chdir $HOME;
