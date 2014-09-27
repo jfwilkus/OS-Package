@@ -15,6 +15,7 @@ use OS::Package::Config qw($OSPKG_CONFIG);
 use OS::Package::Factory;
 use OS::Package::Init;
 use OS::Package::Log;
+use Path::Tiny;
 use Pod::Usage;
 use Try::Tiny;
 
@@ -22,7 +23,7 @@ sub run {
 
     my ( $COMMAND, $APP, %OPT );
 
-    GetOptions( \%OPT, 'b|build_id=s', 'c|config_dir=s', 'p|pkg_dir=s' );
+    GetOptions( \%OPT, 'build_id|b=s', 'config_dir|c=s', 'pkg_dir|p=s' );
 
     $COMMAND = shift @ARGV;
     $APP     = shift @ARGV;
@@ -47,16 +48,21 @@ sub run {
     }
 
     if ( defined $OPT{config_dir} ) {
-        $OSPKG_CONFIG->dir->configs($OPT{config_dir});
+        $OSPKG_CONFIG->dir->configs( $OPT{config_dir} );
     }
 
     if ( defined $OPT{pkg_dir} ) {
-        $OSPKG_CONFIG->dir->packages($OPT{pkg_dir});
+        $OSPKG_CONFIG->dir->packages( $OPT{pkg_dir} );
     }
 
     if ( $COMMAND eq 'init' ) {
         init_ospkg;
         exit;
+    }
+
+    if ( !path( $OSPKG_CONFIG->dir->base )->exists ) {
+        $LOGGER->fatal('has ospkg been initialized?');
+        exit 2;
     }
 
     if ( !defined $APP ) {
@@ -66,7 +72,7 @@ sub run {
 
     my $app = { name => $APP };
 
-    $LOGGER = Log::Log4perl->get_logger($app->{name});
+    $LOGGER = Log::Log4perl->get_logger( $app->{name} );
 
     if ( defined $OPT{build_id} ) {
         $app->{build_id} = $OPT{build_id};
