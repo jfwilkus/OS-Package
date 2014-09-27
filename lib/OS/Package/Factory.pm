@@ -17,6 +17,7 @@ use OS::Package::Config qw( $OSPKG_CONFIG );
 use OS::Package::Log qw( $LOGGER );
 use OS::Package::Maintainer;
 use OS::Package::System;
+use Path::Tiny;
 use YAML::Any qw( LoadFile );
 
 use base qw(Exporter);
@@ -31,7 +32,7 @@ sub vivify {
     my $name      = $arg_ref->{name};
     my $build_id  = $arg_ref->{build_id};
 
-    my $cfg_file = sprintf '%s/%s/%s.yml', $HOME, $OSPKG_CONFIG->dir->configs,
+    my $cfg_file = sprintf '%s/%s.yml', path( $OSPKG_CONFIG->dir->configs ),
         lc($name);
 
     if ( !-f $cfg_file ) {
@@ -92,9 +93,6 @@ sub vivify {
         return;
     }
 
-    my $repository =
-        sprintf( '%s/%s', $HOME, $OSPKG_CONFIG->dir->repository );
-
     if ( defined $config->{build} ) {
         $pkg->install( $config->{build} );
     }
@@ -113,7 +111,7 @@ sub vivify {
 
         $artifact->distfile( basename( $config->{url} ) );
         $artifact->url( $config->{url} );
-        $artifact->repository($repository);
+        $artifact->repository( path( $OSPKG_CONFIG->dir->repository ) );
 
         if ( defined $config->{md5} ) {
             $artifact->md5( $config->{md5} );
@@ -123,8 +121,11 @@ sub vivify {
             $artifact->sha1( $config->{sha1} );
         }
 
-        $artifact->savefile(
-            sprintf( '%s/%s', $repository, basename( $config->{url} ) ) );
+        my $savefile = sprintf( '%s/%s',
+            path( $OSPKG_CONFIG->dir->repository ),
+            basename( $config->{url} ) );
+
+        $artifact->savefile($savefile);
 
     }
     elsif ( defined $config->{os}{ $pkg->system->os }{ $pkg->system->type } )
@@ -136,7 +137,7 @@ sub vivify {
         $artifact = OS::Package::Artifact->new(
             distfile   => basename( $artifact_cfg->{url} ),
             url        => $artifact_cfg->{url},
-            repository => $repository,
+            repository => path( $OSPKG_CONFIG->dir->repository )
         );
 
         if ( defined $artifact_cfg->{md5} ) {
@@ -148,7 +149,9 @@ sub vivify {
         }
 
         $artifact->savefile(
-            sprintf( '%s/%s', $repository, basename( $artifact_cfg->{url} ) )
+            sprintf( '%s/%s',
+                path( $OSPKG_CONFIG->dir->repository ),
+                basename( $artifact_cfg->{url} ) )
         );
 
     }
