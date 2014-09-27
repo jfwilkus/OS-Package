@@ -51,6 +51,8 @@ sub run {
     }
     my $app = { name => $APP };
 
+    $LOGGER = Log::Log4perl->get_logger($app->{name});
+
     if ( defined $OPT{build_id} ) {
         $app->{build_id} = $OPT{build_id};
     }

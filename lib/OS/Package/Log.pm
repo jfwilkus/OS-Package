@@ -14,6 +14,6 @@ our @EXPORT = qw( $LOGGER );
 
 Log::Log4perl::init_once( dist_file( 'OS-Package', 'log.conf' ) );
 
-our $LOGGER = Log::Log4perl->get_logger();
+our $LOGGER = Log::Log4perl->get_logger('ospkg');
 
 1;
