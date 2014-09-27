@@ -2,7 +2,19 @@
 
 OS-Package will build software from source and package the software using the native Operating System packaging tools.
 
-It is currently in active development and not ready for production use.
+It is currently in active development and not ready for production use.  Currently only a Solaris 10 SVR4 plugin is working.
+
+# Usage
+
+```
+$ ospkg build httpd
+```
+
+Specify an alternate configuration location, if it's not in `~/.ospkg/configs`.
+
+```
+$ ospkg build -c ~/projects/ospkg_configs httpd
+```
 
 # Package Configuration
 
