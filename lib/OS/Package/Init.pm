@@ -10,6 +10,7 @@ use base qw(Exporter);
 use Path::Tiny;
 use OS::Package::Config qw($OSPKG_CONFIG);
 use OS::Package::Log qw($LOGGER);
+use YAML::Any qw( DumpFile );
 
 our @EXPORT = qw( init_ospkg );
 
@@ -28,6 +29,13 @@ sub init_ospkg {
             path($dir)->mkpath;
         }
     }
+
+    my $user_config = {
+        config_dir => path($OSPKG_CONFIG->dir->configs)->stringify,
+        pkg_dir    => path($OSPKG_CONFIG->dir->packages)->stringify,
+    };
+
+    DumpFile( path( $OSPKG_CONFIG->user_config ), $user_config );
 
     return 1;
 }
