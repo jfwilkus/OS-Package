@@ -1,10 +1,8 @@
 dir:
-  base: ~/.ospkg
-  repository: ~/.ospkg/distfiles
-  configs: ~/.ospkg/configs
-  work: ~/.ospkg/work
-  fakeroot: ~/.ospkg/fakeroot
-  packages: ~/.ospkg/packages
+  base: "~/.ospkg"
+  repository: "~/.ospkg/distfiles"
+  configs: "~/.ospkg/configs"
+  packages: "~/.ospkg/packages"
 package:
   user: root
   group: root
