@@ -20,4 +20,5 @@ install:
   - "cpanm -n Log::Log4perl"
   - "cpanm -n Template"
   - "cpanm -n Types::Standard"
+  - "cpanm -n DateTime::Format::DateManip"
 script: "dzil test --release --author"
