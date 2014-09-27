@@ -6,6 +6,7 @@ package OS::Package::Artifact::Role::Extract;
 use Archive::Extract;
 use File::Copy;
 use File::Path qw( make_path remove_tree );
+use Path::Tiny;
 use OS::Package::Config;
 use OS::Package::Log;
 use Role::Tiny;
@@ -19,8 +20,8 @@ sub extract {
 
     my $self = shift;
 
-    if ( !-d $self->workdir ) {
-        make_path $self->workdir;
+    if ( ! path($self->workdir)->exists ) {
+        path($self->workdir)->mkpath;
     }
 
     my $archive;
