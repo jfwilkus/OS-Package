@@ -9,4 +9,5 @@ before_install:
 install:
   - "dzil authordeps | xargs cpanm"
   - "dzil listdeps | xargs cpanm"
+  - "cpanm -n Pod::Weaver::Section::Changes"
 script: "dzil test --release --author"
