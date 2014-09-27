@@ -3,6 +3,8 @@ Revision history for OS-Package
 {{$NEXT}}
 
  - Add build tag option
+ - Add init command
+ - ospkg configuration stored in ~/.ospkg by default
 
 0.1.0 2014-09-11
 
