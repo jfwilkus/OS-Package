@@ -49,7 +49,7 @@ sub prune {
                 sprintf( '%s/%s/%s', $self->fakeroot, $self->prefix, $dir );
             $LOGGER->debug( sprintf 'removing directory: %s', $pdir );
 
-            path($pdir)->remove_tree;
+            path($pdir)->remove_tree( { safe => 0 } );
         }
     }
 
