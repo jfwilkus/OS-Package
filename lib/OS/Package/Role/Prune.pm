@@ -35,7 +35,7 @@ sub prune {
                 sprintf( '%s/%s/%s', $self->fakeroot, $self->prefix, $file );
             $LOGGER->debug( sprintf 'removing file: %s', $pfile );
 
-            path($pfile)->remove;
+            unlink path($pfile)->stringify;
         }
     }
 
