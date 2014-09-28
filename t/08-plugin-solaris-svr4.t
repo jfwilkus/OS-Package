@@ -33,7 +33,6 @@ my $cfg = {
     prefix      => '/opt/sf',
     category    => 'application',
     description => 'test application',
-    version     => '1.0.0',
     maintainer  => $maintainer,
     application => $app
 };

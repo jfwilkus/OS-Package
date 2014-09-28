@@ -17,7 +17,7 @@ with qw(
     OS::Package::Role::Prune
 );
 
-has [qw/name description prefix version/] =>
+has [qw/name description prefix/] =>
     ( is => 'rw', isa => Str, required => 1 );
 
 has [qw/config install build_id/] => ( is => 'rw', isa => Str );
