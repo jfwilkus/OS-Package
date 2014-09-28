@@ -3,7 +3,7 @@ use warnings;
 
 package OS::Package;
 
-# ABSTRACT: OS::Package Object
+# ABSTRACT: OS Package Management System
 # VERSION
 
 use Moo;
