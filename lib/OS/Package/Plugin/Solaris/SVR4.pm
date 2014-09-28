@@ -21,9 +21,6 @@ use IPC::Cmd qw( can_run run );
 
 extends 'OS::Package';
 
-has pkgfile_suffix =>
-    ( is => 'ro', isa => Str, required => 1, default => sub {'pkg'} );
-
 has user => (
     is       => 'rw',
     isa      => Str,
@@ -61,12 +58,13 @@ has pkgfile => (
 
         my $version =
             $self->build_id
-            ? sprintf '%s-b%s', $self->application->version, $self->build_id
+            ? sprintf( '%s-b%s', $self->application->version,
+            $self->build_id )
             : $self->application->version;
 
-        return sprintf '%s-%s-%s-%s.pkg', $self->name,
-            $version,
-            $system->os, $system->type, $self->pkgfile_suffix;
+        return sprintf( '%s-%s-%s-%s.pkg',
+            $self->name, $version,
+            $system->os, $system->type );
     }
 );
 
@@ -82,7 +80,8 @@ sub _generate_pkginfo {
 
     my $tt = Template->new($ttcfg);
 
-    my $pkginfo = sprintf '%s/%s/pkginfo', path($self->fakeroot), $self->prefix;
+    my $pkginfo = sprintf '%s/%s/pkginfo', path( $self->fakeroot ),
+        $self->prefix;
 
     my $version =
         $self->build_id
@@ -112,7 +111,7 @@ sub _generate_prototype {
 
     $LOGGER->info('generating: prototype');
 
-    my $pkg_path = sprintf '%s/%s', path($self->fakeroot), $self->prefix;
+    my $pkg_path = sprintf '%s/%s', path( $self->fakeroot ), $self->prefix;
 
     chdir path($pkg_path);
 
@@ -165,27 +164,35 @@ sub _generate_package {
 
     $LOGGER->info( sprintf 'generating package: %s', $self->name );
 
-    my $pkg_path = sprintf '%s/%s', path($self->fakeroot), $self->prefix;
+    my $pkg_path = sprintf '%s/%s', path( $self->fakeroot ), $self->prefix;
 
     chdir path($pkg_path);
 
-    if ( -d sprintf( '%s/%s', path($OSPKG_CONFIG->dir->packages), $self->name ) ) {
+    if (-d sprintf( '%s/%s', path( $OSPKG_CONFIG->dir->packages ),
+            $self->name ) )
+    {
         $LOGGER->debug('removing existing package spool directory');
-        my $spool_dir =
-            sprintf( '%s/%s', path($OSPKG_CONFIG->dir->packages), $self->name );
+        my $spool_dir = sprintf( '%s/%s',
+            path( $OSPKG_CONFIG->dir->packages ),
+            $self->name );
         path($spool_dir)->remove_tree( { safe => 0 } );
     }
 
-    if ( -f sprintf( '%s/%s', path($OSPKG_CONFIG->dir->packages), $self->pkgfile ) )
+    if (-f sprintf( '%s/%s',
+            path( $OSPKG_CONFIG->dir->packages ),
+            $self->pkgfile )
+        )
     {
         $LOGGER->debug('removing existing package file from spool directory');
-        my $pkg_file =
-            sprintf( '%s/%s', path($OSPKG_CONFIG->dir->packages), $self->pkgfile );
+        my $pkg_file = sprintf( '%s/%s',
+            path( $OSPKG_CONFIG->dir->packages ),
+            $self->pkgfile );
         path($pkg_file)->remove;
     }
 
     my $command = [
-        can_run('pkgmk'), '-o', '-r', cwd, '-d', path($OSPKG_CONFIG->dir->packages)
+        can_run('pkgmk'), '-o', '-r', cwd, '-d',
+        path( $OSPKG_CONFIG->dir->packages )
     ];
 
     my ( $success, $error_message, $full_buf, $stdout_buf, $stderr_buf ) =
@@ -202,8 +209,8 @@ sub _generate_package {
     }
 
     $command = [
-        can_run('pkgtrans'),          '-s',
-        path($OSPKG_CONFIG->dir->packages), $self->pkgfile,
+        can_run('pkgtrans'),                  '-s',
+        path( $OSPKG_CONFIG->dir->packages ), $self->pkgfile,
         $self->name
     ];
 
@@ -220,10 +227,13 @@ sub _generate_package {
         return 2;
     }
 
-    if ( -d sprintf( '%s/%s', path($OSPKG_CONFIG->dir->packages), $self->name ) ) {
+    if (-d sprintf( '%s/%s', path( $OSPKG_CONFIG->dir->packages ),
+            $self->name ) )
+    {
         $LOGGER->debug('removing existing package spool directory');
-        my $spool_dir =
-            sprintf( '%s/%s', path($OSPKG_CONFIG->dir->packages), $self->name );
+        my $spool_dir = sprintf( '%s/%s',
+            path( $OSPKG_CONFIG->dir->packages ),
+            $self->name );
         path($spool_dir)->remove_tree( { safe => 0 } );
     }
 
@@ -231,7 +241,7 @@ sub _generate_package {
 
     $LOGGER->info(
         sprintf 'created package: %s/%s',
-        path($OSPKG_CONFIG->dir->packages),
+        path( $OSPKG_CONFIG->dir->packages ),
         $self->pkgfile
     );
 
