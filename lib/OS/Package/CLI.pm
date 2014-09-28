@@ -57,7 +57,7 @@ sub run {
 
     if ( $COMMAND eq 'init' ) {
         init_ospkg;
-        $LOGGER->info( sprintf 'puts configs in %s',
+        $LOGGER->info( sprintf 'put configs in %s',
             $OSPKG_CONFIG->dir->configs );
         exit;
     }
