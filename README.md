@@ -68,7 +68,7 @@ build: |
 
 maintainer:
   author: James F Wilkus
-  email: jfwilkus@mac.com
+  email: jfwilkus@cpan.org
   nickname: jfwilkus
 
 prune:
