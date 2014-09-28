@@ -3,7 +3,7 @@ use warnings;
 
 package OS::Package::System;
 
-# ABSTRACT: Default Abstract Description, Please Change.
+# ABSTRACT: Determine OS version and type.
 # VERSION
 
 use Moo;
@@ -38,8 +38,8 @@ has 'type' => (
 
 =method os
 
-Host operating system
+Host operating system.
 
 =method type
 
-=method bits
+Host type.

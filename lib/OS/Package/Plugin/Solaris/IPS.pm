@@ -3,7 +3,7 @@ use warnings;
 
 package OS::Package::Plugin::Solaris::IPS;
 
-# ABSTRACT: Default Abstract Description, Please Change.
+# ABSTRACT: Solaris 11 package plugin.
 # VERSION
 
 use Moo;

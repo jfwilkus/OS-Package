@@ -3,7 +3,7 @@ use warnings;
 
 package OS::Package::Plugin::Linux::RPM;
 
-# ABSTRACT: Default Abstract Description, Please Change.
+# ABSTRACT: RPM package plugin.
 # VERSION
 
 use Moo;

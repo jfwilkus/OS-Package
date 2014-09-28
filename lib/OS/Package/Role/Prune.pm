@@ -3,7 +3,7 @@ use warnings;
 
 package OS::Package::Role::Prune;
 
-# ABSTRACT: Default Abstract Description, Please Change.
+# ABSTRACT: Provides prune method for OS::Package object.
 # VERSION
 
 use OS::Package::Log;
@@ -60,4 +60,4 @@ sub prune {
 
 =method prune
 
-Attempts to clean workdir and fakeroot directories.
+Deletes files and directories from the fakeroot.

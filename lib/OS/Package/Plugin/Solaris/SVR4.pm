@@ -3,7 +3,7 @@ use warnings;
 
 package OS::Package::Plugin::Solaris::SVR4;
 
-# ABSTRACT: Default Abstract Description, Please Change.
+# ABSTRACT: Solaris 10 package plugin.
 # VERSION
 
 use Cwd;

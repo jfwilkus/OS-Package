@@ -3,7 +3,7 @@ use warnings;
 
 package OS::Package::Plugin::Linux::deb;
 
-# ABSTRACT: Default Abstract Description, Please Change.
+# ABSTRACT: Debian package plugin.
 # VERSION
 
 use Moo;

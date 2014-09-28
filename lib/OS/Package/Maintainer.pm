@@ -3,7 +3,7 @@ use warnings;
 
 package OS::Package::Maintainer;
 
-# ABSTRACT: Default Abstract Description, Please Change.
+# ABSTRACT: OS::Package::Maintainer object.
 # VERSION
 
 use Moo;
@@ -32,12 +32,36 @@ sub by_line {
         $by_line .= sprintf ' <%s>', $self->email;
     }
 
+    if ( defined $self->phone ) {
+        $by_line .= sprintf ' %s', $self->phone;
+    }
+
     return $by_line;
 
 }
 
 1;
 
+=method author
+
+Name of the maintainer (required).
+
+=method nickname
+
+Nickname of the maintainer.
+
+=method email
+
+The email address of the maintainer.
+
+=method phone
+
+Phone number of the maintainer.
+
+=method company
+
+The company of the maintainer.
+
 =method by_line
 
-Returns string "Author (nickname) <email>".
+Returns string "Author (nickname) <email> phone".

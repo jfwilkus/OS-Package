@@ -3,7 +3,7 @@ use warnings;
 
 package OS::Package::Role::Build;
 
-# ABSTRACT: Default Abstract Description, Please Change.
+# ABSTRACT: Provides build method for OS::Package object.
 # VERSION
 
 use OS::Package::Log;
