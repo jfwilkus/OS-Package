@@ -2,6 +2,7 @@ Revision history for OS-Package
 
 {{$NEXT}}
 
+ - Fix sprintf error in SVR4 plugin
  - Add missing dependency
 
 0.2.3 2014-09-27
