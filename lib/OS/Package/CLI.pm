@@ -82,7 +82,7 @@ sub run {
 
     my $pkg = vivify($app);
 
-    $LOGGER->info( sprintf 'processing: %s %s', $pkg->name, $pkg->version );
+    $LOGGER->info( sprintf 'processing: %s %s', $pkg->name, $pkg->application->version );
 
     if ( $COMMAND eq 'download' ) {
         $pkg->artifact->download;
