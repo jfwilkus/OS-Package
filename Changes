@@ -2,6 +2,8 @@ Revision history for OS-Package
 
 {{$NEXT}}
 
+ - Add -repo_dir option
+
 0.2.6 2014-09-29
 
  - Fix log entry
