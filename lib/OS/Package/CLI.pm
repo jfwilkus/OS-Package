@@ -23,7 +23,7 @@ sub run {
 
     my ( $COMMAND, $APP, %OPT );
 
-    GetOptions( \%OPT, 'build_id|b=s', 'config_dir|c=s', 'pkg_dir|p=s' );
+    GetOptions( \%OPT, 'build_id|b=s', 'config_dir|c=s', 'pkg_dir|p=s', 'repo_dir|r=s' );
 
     $COMMAND = shift @ARGV;
     $APP     = shift @ARGV;
@@ -53,6 +53,10 @@ sub run {
 
     if ( defined $OPT{pkg_dir} ) {
         $OSPKG_CONFIG->dir->packages( $OPT{pkg_dir} );
+    }
+
+    if ( defined $OPT{repo_dir} ) {
+        $OSPKG_CONFIG->dir->repository( $OPT{repo_dir} );
     }
 
     if ( $COMMAND eq 'init' ) {
