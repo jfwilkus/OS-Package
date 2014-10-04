@@ -53,10 +53,18 @@ Prints version and exits.
 
 =item B<-c|--config_dir> I<directory>
 
-Specify a directory where the configuration files are stored.  Default is ~/.ospkg/configs.
+Specify a directory where the configuration files are stored.  Default is C<~/.ospkg/configs>.
 
 =item B<-p|--pkg_dir> I<directory>
 
-Specify a directory where the packages files are stored.  Default is ~/.ospkg/packages.
+Specify a directory where the packages files are stored.  Default is C<~/.ospkg/packages>.
+
+=item B<-r|--repo_dir> I<directory>
+
+Specify a directory where the distribution files are stored.  Default is C<~/.ospkg/distfiles>.
+
+=item B<-b|--build_id> I<Build Identifier>
+
+A string that identifies the build.  There is no default.
 
 =back
