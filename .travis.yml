@@ -10,8 +10,8 @@ before_install:
 install:
   - "sudo apt-get update"
   - "sudo apt-get install aspell aspell-en"
-  - "dzil authordeps | xargs cpanm"
-  - "dzil listdeps | xargs cpanm"
+  - "dzil authordeps | xargs cpanm -n"
+  - "dzil listdeps | xargs cpanm -n"
   - "cpanm -n Pod::Weaver::Section::Changes"
   - "cpanm -n Pod::Elemental::Transformer::List"
   - "cpanm -n Test::Perl::Critic"
